@@ -1,11 +1,10 @@
 import { ConflictException, Injectable } from '@nestjs/common';
 
-import * as dayjs from 'dayjs';
+import { createMessage } from '@project/lib/shared/helpers';
 
 import { UserRepository } from '../user/user.repository';
 import { CreateUserDto } from './dto/create-user.dto';
 import { LoginUserDto } from './dto/login-user.dto';
-import { createMessage } from '@project/lib/shared/helpers';
 import { ErrorMessage } from './auth.constant';
 import { UserEntity } from '../user/user.entity';
 
@@ -20,7 +19,6 @@ export class AuthService {
       fullName: dto.fullName,
       email: dto.email,
       password: '',
-      createdDate: dayjs().toDate(),
       avatar: dto.avatar
     }
     const existUser = await this.userRepository.findByEmail(dto.email);
@@ -28,7 +26,7 @@ export class AuthService {
     if(existUser) {
       throw new ConflictException(createMessage(ErrorMessage.USER_EXISTS_MESSAGE, [dto.email]));
     }
-    const userEntity = new UserEntity(user).setPassword(dto.password);
+    const userEntity = await new UserEntity(user).setPassword(dto.password);
 
     return this.userRepository.save(userEntity);
   }
