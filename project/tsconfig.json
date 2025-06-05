@@ -7,26 +7,15 @@
       "path": "./apps/customers"
     },
     {
-      "path": "./apps/file-e2e"
-    },
-    {
       "path": "./apps/file"
-    },
-    {
-      "path": "./apps/news-feed-e2e"
     },
     {
       "path": "./apps/news-feed"
     },
     {
-      "path": "./apps/notifications-e2e"
-    },
-    {
       "path": "./apps/notifications"
     },
-    {
-      "path": "./apps/publications-e2e"
-    },
+
     {
       "path": "./apps/publications"
     }
