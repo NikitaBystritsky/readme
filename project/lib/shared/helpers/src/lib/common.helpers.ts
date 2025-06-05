@@ -19,3 +19,8 @@ export function createMessage<T>(message: string, expressions: T[] = []): string
 
   return expressions.reduce((accumulator: string, currentValue: T) => accumulator.replace(REGEX, String(currentValue)), message);
 }
+
+
+export function getMongoConnectionString({host, port, database, username, userPassword, authSource}): string {
+  return `mongodb://${username}:${userPassword}@${host}:${port}/${database}?authSource=${authSource}`;
+}

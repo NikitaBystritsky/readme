@@ -6,3 +6,4 @@ export * from './lib/quote-post.interface';
 export * from './lib/photo-post.interface';
 export * from './lib/link-post.interface';
 export * from './lib/comment.interface';
+export * from './lib/timestamps.interface';

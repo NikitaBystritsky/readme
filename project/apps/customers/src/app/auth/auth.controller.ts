@@ -3,6 +3,7 @@ import { Body, Controller, Get, HttpCode, HttpStatus, Param, Post } from '@nestj
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
 
 import { fillDto } from '@project/lib/shared/helpers';
+
 import { AuthService } from './auth.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { LoginUserDto } from './dto/login-user.dto';
@@ -32,6 +33,7 @@ export class AuthController {
   @Post('sign-up')
   public async create(@Body() dto: CreateUserDto) {
     const newUser = await this.authService.registerUser(dto);
+
     return fillDto(NewUserRdo, newUser.toObject());
   }
 
@@ -51,6 +53,7 @@ export class AuthController {
   @HttpCode(200)
   public async login(@Body() dto: LoginUserDto) {
     const verifiedUser = await this.authService.verifyUser(dto);
+
     return fillDto(LoggedUserRdo, verifiedUser.toObject());
   }
 
@@ -66,6 +69,7 @@ export class AuthController {
   @HttpCode(200)
   public async show(@Param('id') id: string) {
     const user = await this.authService.getUser(id);
+
     return fillDto(UserRdo, user.toObject());
   }
 }
