@@ -1,0 +1,9 @@
+{
+  "name": "lib-shared-helpers",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "lib/shared/helpers/src",
+  "projectType": "library",
+  "tags": [],
+  "// targets": "to see all targets run: nx show project lib-shared-helpers --web",
+  "targets": {}
+}
