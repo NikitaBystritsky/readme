@@ -3,9 +3,10 @@ import { Document } from 'mongoose';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 
 import { ExtendUser } from '@project/lib/shared/app/types';
+import { SCHEMA_COLLECTION } from './user.constant';
 
 @Schema({
-  collection: 'users',
+  collection: SCHEMA_COLLECTION,
   timestamps: true
 })
 export class UserModel extends Document implements ExtendUser {

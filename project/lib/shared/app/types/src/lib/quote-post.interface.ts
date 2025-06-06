@@ -1,6 +1,7 @@
-import { Post } from './post.interface';
+import { Timestamps } from './timestamps.interface';
 
-export interface QuotePost extends Post {
+export interface QuotePost extends Timestamps {
+  id?: string;
   content: string;
   author: string;
 }

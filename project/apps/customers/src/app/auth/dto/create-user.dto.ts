@@ -1,27 +1,34 @@
 import { ApiProperty } from '@nestjs/swagger';
 
-export class CreateUserDto {
+import {
+  AvatarProperty,
+  EmailProperty,
+  FullNameProperty,
+  PasswordProperty
+} from '../auth.constant';
+
+export class CreateUserDTO {
   @ApiProperty({
-    description: 'Last name and first name of the user.',
-    example: 'Глуханько Антон'
+    description: FullNameProperty.DESCRIPTION,
+    example: FullNameProperty.EXAMPLE
   })
   public fullName: string;
 
   @ApiProperty({
-    description: 'The user unique email address.',
-    example: 'user@mail.ru'
+    description: EmailProperty.DESCRIPTION,
+    example: EmailProperty.EXAMPLE
   })
   public email: string;
 
   @ApiProperty({
-    description: 'The user password.',
-    example: '123456'
+    description: PasswordProperty.DESCRIPTION,
+    example: PasswordProperty.EXAMPLE
   })
   public password: string;
 
   @ApiProperty({
-    description: 'The user avatar path.',
-    example: 'default-avatar.png'
+    description: AvatarProperty.DESCRIPTION,
+    example: AvatarProperty.EXAMPLE
   })
   public avatar?: string;
 }

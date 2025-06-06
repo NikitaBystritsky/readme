@@ -1,0 +1,9 @@
+{
+  "name": "lib-config-publications",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "lib/config/publications/src",
+  "projectType": "library",
+  "tags": [],
+  "// targets": "to see all targets run: nx show project lib-config-publications --web",
+  "targets": {}
+}

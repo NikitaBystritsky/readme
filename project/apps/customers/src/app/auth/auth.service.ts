@@ -1,11 +1,16 @@
-import { ConflictException, Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 
 import { createMessage } from '@project/lib/shared/helpers';
 
 import { UserRepository } from '../user/user.repository';
-import { CreateUserDto } from './dto/create-user.dto';
-import { LoginUserDto } from './dto/login-user.dto';
-import { ErrorMessage } from './auth.constant';
+import { CreateUserDTO } from './dto/create-user.dto';
+import { LoginUserDTO } from './dto/login-user.dto';
+import {
+  NOT_FOUND_BY_EMAIL_MESSAGE,
+  NOT_FOUND_BY_ID_MESSAGE,
+  USER_EXISTS_MESSAGE,
+  WRONG_PASSWORD_MESSAGE
+} from './auth.constant';
 import { UserEntity } from '../user/user.entity';
 
 @Injectable()
@@ -14,7 +19,7 @@ export class AuthService {
     private readonly userRepository: UserRepository
   ) {}
 
-  public async registerUser(dto: CreateUserDto): Promise<UserEntity> {
+  public async registerUser(dto: CreateUserDTO): Promise<UserEntity> {
     const user = {
       fullName: dto.fullName,
       email: dto.email,
@@ -24,23 +29,23 @@ export class AuthService {
     const existUser = await this.userRepository.findByEmail(dto.email);
 
     if(existUser) {
-      throw new ConflictException(createMessage(ErrorMessage.USER_EXISTS_MESSAGE, [dto.email]));
+      throw new NotFoundException(createMessage(USER_EXISTS_MESSAGE, [dto.email]));
     }
     const userEntity = await new UserEntity(user).setPassword(dto.password);
 
     return this.userRepository.save(userEntity);
   }
 
-  public async verifyUser(dto: LoginUserDto): Promise<UserEntity> {
+  public async verifyUser(dto: LoginUserDTO): Promise<UserEntity> {
     const existUser = await this.userRepository.findByEmail(dto.email);
 
     if(!existUser) {
-      throw new ConflictException(createMessage(ErrorMessage.NOT_FOUND_BY_EMAIL_MESSAGE, [dto.email]));
+      throw new NotFoundException(createMessage(NOT_FOUND_BY_EMAIL_MESSAGE, [dto.email]));
     }
     const isMatch = await existUser.comparePassword(dto.password);
 
     if(!isMatch) {
-      throw new ConflictException(ErrorMessage.WRONG_PASSWORD_MESSAGE);
+      throw new UnauthorizedException(WRONG_PASSWORD_MESSAGE);
     }
 
     return existUser;
@@ -50,7 +55,7 @@ export class AuthService {
     const existUser = await this.userRepository.findById(id);
 
     if(!existUser) {
-      throw new ConflictException(createMessage(ErrorMessage.NOT_FOUND_BY_ID_MESSAGE, [id]));
+      throw new NotFoundException(createMessage(NOT_FOUND_BY_ID_MESSAGE, [id]));
     }
 
     return existUser;

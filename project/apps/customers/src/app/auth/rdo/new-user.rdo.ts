@@ -1,38 +1,47 @@
 import { ApiProperty } from '@nestjs/swagger';
+
 import { Expose } from 'class-transformer';
 
-export class NewUserRdo {
+import {
+  AvatarProperty,
+  CreatedAtProperty,
+  EmailProperty,
+  FullNameProperty,
+  IdProperty
+} from '../auth.constant';
+
+export class NewUserRDO {
   @ApiProperty({
-    description: 'A unique user ID.',
-    example: '667c673deb3171fbdaa4ce26'
+    description: IdProperty.DESCRIPTION,
+    example: IdProperty.EXAMPLE
   })
   @Expose()
   public id: string;
 
   @ApiProperty({
-    description: 'Last name and first name of the user.',
-    example: 'Глуханько Антон'
+    description: FullNameProperty.DESCRIPTION,
+    example: FullNameProperty.EXAMPLE
   })
   @Expose()
   public fullName: string;
 
   @ApiProperty({
-    description: 'The user unique email address.',
-    example: 'user@mail.ru'
+    description: EmailProperty.DESCRIPTION,
+    example: EmailProperty.EXAMPLE
   })
   @Expose()
   public email: string
 
   @ApiProperty({
-    description: 'The user avatar path.',
-    example: 'default-avatar.png'
+    description: AvatarProperty.DESCRIPTION,
+    example: AvatarProperty.EXAMPLE
   })
   @Expose()
   public avatar: string;
 
   @ApiProperty({
-    description: 'The user created date.',
-    example: '2022-01-18T17:36:34.064Z'
+    description: CreatedAtProperty.DESCRIPTION,
+    example: CreatedAtProperty.EXAMPLE
   })
   @Expose()
   public createdAt: string;

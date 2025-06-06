@@ -5,14 +5,25 @@ import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { fillDto } from '@project/lib/shared/helpers';
 
 import { AuthService } from './auth.service';
-import { CreateUserDto } from './dto/create-user.dto';
-import { LoginUserDto } from './dto/login-user.dto';
-import { NewUserRdo } from './rdo/new-user.rdo';
-import { LoggedUserRdo } from './rdo/logged-user.rdo';
-import { UserRdo } from './rdo/user.rdo';
+import { CreateUserDTO } from './dto/create-user.dto';
+import { LoginUserDTO } from './dto/login-user.dto';
+import { NewUserRDO } from './rdo/new-user.rdo';
+import { LoggedUserRDO } from './rdo/logged-user.rdo';
+import { UserRDO } from './rdo/user.rdo';
+import {
+  AUTHENTICATION_ERROR_RESPONSE,
+  EXISTING_EMAIL_RESPONSE,
+  NOT_FOUND_BY_ID_RESPONSE,
+  Route,
+  ROUTE_PREFIX,
+  SUCCESSFUL_AUTHORIZATION_RESPONSE,
+  TAG,
+  USER_CREATED_RESPONSE,
+  VALIDATION_ERROR_RESPONSE
+} from './auth.constant';
 
-@ApiTags('user')
-@Controller('user')
+@ApiTags(TAG)
+@Controller(ROUTE_PREFIX)
 export class AuthController {
   constructor(
     private readonly authService: AuthService
@@ -20,56 +31,56 @@ export class AuthController {
 
   @ApiResponse({
     status: HttpStatus.CREATED,
-    description: 'The new user has been successfully created.'
+    description: USER_CREATED_RESPONSE
   })
   @ApiResponse({
     status: HttpStatus.BAD_REQUEST,
-    description: 'Validation error.'
+    description: VALIDATION_ERROR_RESPONSE
   })
   @ApiResponse({
     status: HttpStatus.CONFLICT,
-    description: 'The user with this email is registered.'
+    description: EXISTING_EMAIL_RESPONSE
   })
-  @Post('sign-up')
-  public async create(@Body() dto: CreateUserDto) {
+  @Post(Route.Registration)
+  public async create(@Body() dto: CreateUserDTO) {
     const newUser = await this.authService.registerUser(dto);
 
-    return fillDto(NewUserRdo, newUser.toObject());
+    return fillDto(NewUserRDO, newUser.toObject());
   }
 
   @ApiResponse({
     status: HttpStatus.OK,
-    description: 'The user successfully logged in.'
+    description: SUCCESSFUL_AUTHORIZATION_RESPONSE
   })
   @ApiResponse({
     status: HttpStatus.BAD_REQUEST,
-    description: 'Validation error.'
+    description: VALIDATION_ERROR_RESPONSE
   })
   @ApiResponse({
     status: HttpStatus.CONFLICT,
-    description: 'The wrong email or password was entered.'
+    description: AUTHENTICATION_ERROR_RESPONSE
   })
-  @Post('sign-in')
+  @Post(Route.Authentication)
   @HttpCode(200)
-  public async login(@Body() dto: LoginUserDto) {
+  public async login(@Body() dto: LoginUserDTO) {
     const verifiedUser = await this.authService.verifyUser(dto);
 
-    return fillDto(LoggedUserRdo, verifiedUser.toObject());
+    return fillDto(LoggedUserRDO, verifiedUser.toObject());
   }
 
   @ApiResponse({
     status: HttpStatus.BAD_REQUEST,
-    description: 'Validation error.'
+    description: VALIDATION_ERROR_RESPONSE
   })
   @ApiResponse({
     status: HttpStatus.CONFLICT,
-    description: 'The user with this id not found.'
+    description: NOT_FOUND_BY_ID_RESPONSE
   })
-  @Get(':id')
+  @Get(Route.UserParam)
   @HttpCode(200)
   public async show(@Param('id') id: string) {
     const user = await this.authService.getUser(id);
 
-    return fillDto(UserRdo, user.toObject());
+    return fillDto(UserRDO, user.toObject());
   }
 }

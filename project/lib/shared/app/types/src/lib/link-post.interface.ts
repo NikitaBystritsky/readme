@@ -1,6 +1,7 @@
-import { Post } from './post.interface';
+import { Timestamps } from './timestamps.interface';
 
-export interface LinkPost extends Post {
+export interface LinkPost extends Timestamps {
+  id?: string;
   url: string;
   description: string;
 }
