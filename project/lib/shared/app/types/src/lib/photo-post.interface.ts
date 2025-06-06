@@ -1,5 +1,6 @@
-import { Post } from './post.interface';
+import { Timestamps } from './timestamps.interface';
 
-export interface PhotoPost extends Post {
+export interface PhotoPost extends Timestamps {
+  id?: string;
   image: string;
 }

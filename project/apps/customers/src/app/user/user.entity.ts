@@ -36,6 +36,7 @@ export class UserEntity implements ExtendUser, Entity<string> {
   }
 
   public populate(user: ExtendUser) {
+    this.id = user.id;
     this.fullName = user.fullName;
     this.email = user.email;
     this.password = user.password;

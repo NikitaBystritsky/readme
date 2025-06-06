@@ -1,13 +1,27 @@
+import { LinkPost } from './link-post.interface';
+import { PhotoPost } from './photo-post.interface';
+import { PostTags } from './post-tags.interface';
+import { QuotePost } from './quote-post.interface';
+import { TextPost } from './text-post.interface';
+import { Timestamps } from './timestamps.interface';
+import { VideoPost } from './video-post.interface';
 import { PostStatus, PostType } from './post.enum';
 
-export interface Post {
+export interface Post extends Timestamps {
   id?: string;
-  teg?: string;
-  type: PostType;
-  status: PostStatus;
+  type: `${PostType}`;
+  status: `${PostStatus}`;
   userId: string;
   publishedDate?: Date;
-  createdDate?: Date;
+  repost?: boolean;
+  originalUserId?: string;
+  originalPublicationId?: string;
+  link?: LinkPost;
+  photo?: PhotoPost;
+  quote?: QuotePost;
+  video?: VideoPost;
+  text?: TextPost;
+  tags?: PostTags;
   likeCount?: number;
   commentCount?: number;
 }

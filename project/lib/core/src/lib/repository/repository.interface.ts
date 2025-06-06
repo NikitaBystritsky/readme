@@ -1,8 +1,11 @@
-import { Entity, EntityId } from './entity.interface';
+import { DefaultToObjectType, Entity, EntityId } from './entity.interface';
 
-export interface Repository<T extends Entity<EntityId>> {
-  findById(id: T['id']): Promise<T | null>;
-  save(entity: T): Promise<T>;
-  update(id: T['id'], entity: T): Promise<T>;
-  delete(id: T['id']): Promise<void>;
+export interface Repository<
+    EntityType extends Entity<EntityId, ToObjectType>,
+    ToObjectType = DefaultToObjectType
+  > {
+  findById(id: EntityType['id']): Promise<EntityType | null>;
+  save(entity: EntityType): Promise<EntityType>;
+  update(id: EntityType['id'], entity: EntityType): Promise<EntityType>;
+  delete(id: EntityType['id']): Promise<void>;
 }

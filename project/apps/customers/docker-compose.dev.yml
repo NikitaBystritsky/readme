@@ -1,8 +1,8 @@
 version: '3.9'
 services:
-  db:
+  mongo:
     image: mongo:7.0
-    container_name: readme_db
+    container_name: readme_mongo
     restart: always
     environment:
       MONGO_INITDB_ROOT_USERNAME: ${MONGO_DB_USERNAME}
@@ -11,13 +11,13 @@ services:
     ports:
       - ${MONGO_DB_PORT}:27017
     volumes:
-      - readme_data:/data/db
+      - mongo_data:/data/db
     healthcheck:
       test: echo 'db.runCommand("ping").ok' | mongosh ${MONGO_DB_HOST}:${MONGO_DB_PORT}/${MONGO_DB_NAME} --quiet
       interval: 10s
       timeout: 10s
       retries: 5
-  db_ui:
+  mongo_ui:
     image: mongo-express:latest
     container_name: readme_mongo-express
     restart: always
@@ -28,7 +28,7 @@ services:
       ME_CONFIG_BASICAUTH_PASSWORD: ${MONGO_DB_USER_PASSWORD}
       ME_CONFIG_MONGODB_ADMINUSERNAME: ${MONGO_DB_USERNAME}
       ME_CONFIG_MONGODB_ADMINPASSWORD: ${MONGO_DB_USER_PASSWORD}
-      ME_CONFIG_MONGODB_URL: mongodb://${MONGO_DB_USERNAME}:${MONGO_DB_USER_PASSWORD}@db:${MONGO_DB_PORT}/
+      ME_CONFIG_MONGODB_URL: mongodb://${MONGO_DB_USERNAME}:${MONGO_DB_USER_PASSWORD}@mongo:${MONGO_DB_PORT}/
 
 volumes:
-  readme_data:
+  mongo_data:
