@@ -1,11 +1,15 @@
 import { ApiProperty } from '@nestjs/swagger';
 
+import { IsEnum, IsISO8601, IsOptional } from 'class-validator';
+
 import { PostStatus } from '@project/lib/shared/app/types';
 import {
   AuthorProperty,
   ContentProperty,
+  DATE_TYPE_MESSAGE,
   DescriptionProperty,
   ImageProperty,
+  POST_STATUS_MESSAGE,
   PreviewProperty,
   PublishedDateProperty,
   StatusProperty,
@@ -20,12 +24,16 @@ export class UpdatePostDTO {
     description: StatusProperty.DESCRIPTION,
     example: StatusProperty.EXAMPLE
   })
+  @IsEnum(PostStatus, {message: POST_STATUS_MESSAGE})
+  @IsOptional()
   public status?: PostStatus;
 
   @ApiProperty({
     description: PublishedDateProperty.DESCRIPTION,
     example: PublishedDateProperty.EXAMPLE
   })
+  @IsISO8601({}, {message: DATE_TYPE_MESSAGE})
+  @IsOptional()
   public publishedDate?: Date;
 
   @ApiProperty({
@@ -74,5 +82,5 @@ export class UpdatePostDTO {
     description: TagsProperty.DESCRIPTION,
     example: TagsProperty.EXAMPLE
   })
-  public tags?: string;
+  public tags?: string[];
 }

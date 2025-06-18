@@ -19,3 +19,4 @@ export class VideoPostRDO {
   @Expose()
   public url: string;
 }
+

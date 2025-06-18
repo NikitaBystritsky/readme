@@ -1,0 +1,9 @@
+{
+  "name": "lib-swagger",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "lib/swagger/src",
+  "projectType": "library",
+  "tags": [],
+  "// targets": "to see all targets run: nx show project lib-swagger --web",
+  "targets": {}
+}

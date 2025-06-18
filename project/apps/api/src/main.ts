@@ -5,18 +5,20 @@
 
 import { Logger } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
+import { ConfigService } from '@nestjs/config';
 
 import { AppModule } from './app/app.module';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const globalPrefix = 'api';
+  const configService = app.get(ConfigService);
+  const port = configService.get<string>('app.port');
+  const hostname = configService.get<string>('app.host');
   app.setGlobalPrefix(globalPrefix);
-  const port = process.env.PORT || 3000;
+
   await app.listen(port);
-  Logger.log(
-    `🚀 Application is running on: http://localhost:${port}/${globalPrefix}`
-  );
+  Logger.log(`🚀 Application is running on: http://${hostname}:${port}/${globalPrefix}`);
 }
 
 bootstrap();

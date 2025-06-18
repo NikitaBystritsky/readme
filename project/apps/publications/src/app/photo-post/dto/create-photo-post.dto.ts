@@ -1,11 +1,19 @@
 import { ApiProperty } from '@nestjs/swagger';
 
-import { ImageProperty } from '../photo-post.constant';
+import { IsNotEmpty, IsString } from 'class-validator';
+
+import {
+  PhotoProperty,
+  REQUIRED_MESSAGE,
+  TYPE_MESSAGE
+} from '../photo-post.constant';
 
 export class CreatePhotoPostDTO {
   @ApiProperty({
-    description: ImageProperty.DESCRIPTION,
-    example: ImageProperty.EXAMPLE
+    description: PhotoProperty.DESCRIPTION,
+    example: PhotoProperty.EXAMPLE
   })
+  @IsString({message: TYPE_MESSAGE})
+  @IsNotEmpty({message: REQUIRED_MESSAGE})
   public image: string;
 }

@@ -1,17 +1,23 @@
 import { ApiProperty } from '@nestjs/swagger';
 
+import { IsEnum, IsMongoId, IsNotEmpty } from 'class-validator';
+
 import { PostStatus, PostType } from '@project/lib/shared/app/types';
 import {
   AuthorProperty,
   ContentProperty,
   DescriptionProperty,
   ImageProperty,
+  POST_STATUS_MESSAGE,
+  POST_TYPE_MESSAGE,
   PreviewProperty,
+  REQUIRED_MESSAGE,
   StatusProperty,
   TagsProperty,
   TitleProperty,
   TypeProperty,
   URLProperty,
+  USER_ID_TYPE_MESSAGE,
   UserIdProperty
 } from '../post.constant';
 
@@ -21,6 +27,8 @@ export class CreatePostDTO {
     description: TypeProperty.DESCRIPTION,
     example: TypeProperty.EXAMPLE
   })
+  @IsEnum(PostType, {message: POST_TYPE_MESSAGE})
+  @IsNotEmpty({message: REQUIRED_MESSAGE})
   public type: PostType;
 
   @ApiProperty({
@@ -28,12 +36,16 @@ export class CreatePostDTO {
     description: StatusProperty.DESCRIPTION,
     example: StatusProperty.EXAMPLE
   })
+  @IsEnum(PostStatus, {message: POST_STATUS_MESSAGE})
+  @IsNotEmpty({message: REQUIRED_MESSAGE})
   public status: PostStatus;
 
   @ApiProperty({
     description: UserIdProperty.DESCRIPTION,
     example: UserIdProperty.EXAMPLE
   })
+  @IsMongoId({message: USER_ID_TYPE_MESSAGE})
+  @IsNotEmpty({message: REQUIRED_MESSAGE})
   public userId: string;
 
   @ApiProperty({
@@ -82,5 +94,5 @@ export class CreatePostDTO {
     description: TagsProperty.DESCRIPTION,
     example: TagsProperty.EXAMPLE
   })
-  public tags?: string;
+  public tags?: string[];
 }

@@ -79,6 +79,6 @@ export class CommentController {
   @Delete(Route.CommentParam)
   @HttpCode(204)
   public async destroy(@Param('id') id: string) {
-    await this.commentService.deleteCommentById(id);
+    await this.commentService.deleteCommentById(id, '66e87f4f646c29eff76565a8');
   }
 }

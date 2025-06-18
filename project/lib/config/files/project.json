@@ -1,0 +1,9 @@
+{
+  "name": "lib-config-files",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "lib/config/files/src",
+  "projectType": "library",
+  "tags": [],
+  "// targets": "to see all targets run: nx show project lib-config-files --web",
+  "targets": {}
+}

@@ -1,4 +1,4 @@
-import * as dayjs from 'dayjs';
+import dayjs from 'dayjs';
 
 import { ConflictException, Injectable } from '@nestjs/common';
 
@@ -17,6 +17,7 @@ import { PostTagsEntity } from '../post-tags/post-tags.entity';
 import { createMessage } from '@project/lib/shared/helpers';
 import { NOT_FOUND_BY_ID_MESSAGE, REPOST_ERROR_MESSAGE } from './post.constant';
 import { PostContent } from './post.type';
+import { PostQuery } from './query/post.query';
 
 @Injectable()
 export class PostService {
@@ -83,12 +84,12 @@ export class PostService {
     return this.postRepository.findById(id);
   }
 
-  public async getAllPosts({type, tagName, userId, sort, count}) {
-    return this.postRepository.find({type, tagName, userId, sort, count});
+  public async getAllPosts(query?: PostQuery) {
+    return this.postRepository.find(query);
   }
 
-  public async getPostsByDraftStatus({sort, count}) {
-    return this.postRepository.findByDraftStatus({sort, count});
+  public async getPostsByDraftStatus(userId: string) {
+    return this.postRepository.findByDraftStatus(userId);
   }
 
   public async updatePostById(id: string, dto: UpdatePostDTO) {
@@ -136,5 +137,9 @@ export class PostService {
     } catch {
       throw new ConflictException(createMessage(NOT_FOUND_BY_ID_MESSAGE, [id]));
     }
+  }
+
+  public async searchPostByTittle(searchParams: string) {
+    return this.postRepository.search(searchParams);
   }
 }

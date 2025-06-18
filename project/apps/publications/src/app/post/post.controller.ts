@@ -1,13 +1,11 @@
 import {
   Body,
   Controller,
-  DefaultValuePipe,
   Delete,
   Get,
   HttpCode,
   HttpStatus,
   Param,
-  ParseIntPipe,
   Patch,
   Post,
   Query
@@ -18,9 +16,7 @@ import { PostService } from './post.service';
 import { CreatePostDTO } from './dto/create-post.dto';
 import { fillDto } from '@project/lib/shared/helpers';
 import { PostRDO } from './rdo/post.rdo';
-import { PostType, SortType } from '@project/lib/shared/app/types';
 import {
-  DEFAULT_MAX_POST_COUNT,
   NOT_AUTHORIZED_RESPONSE,
   POST_CREATED_RESPONSE,
   POST_DELETE_RESPONSE,
@@ -35,6 +31,8 @@ import {
   VALIDATION_RESPONSE
 } from './post.constant';
 import { UpdatePostDTO } from './dto/update-post.dto';
+import { PostQuery } from './query/post.query';
+import { PostWithPaginationRDO } from './rdo/post-with-pagination.rdo';
 
 @ApiTags(TAG)
 @Controller(ROUTE_PREFIX)
@@ -71,9 +69,7 @@ export class PostController {
     description: NOT_AUTHORIZED_RESPONSE
   })
   @Post(Route.Repost)
-  public async repost(
-    @Param('id') id: string
-  ) {
+  public async repost(@Param('id') id: string) {
     const newPost = await this.postService.repostPost(id, '66e9d8681f48c49323a88c87');
 
     return fillDto(PostRDO, newPost.toObject(), {exposeDefaultValues: false});
@@ -84,16 +80,10 @@ export class PostController {
     description: POSTS_FOUND_RESPONSE
   })
   @Get(Route.Root)
-  public async index(
-    @Query('count', new DefaultValuePipe(DEFAULT_MAX_POST_COUNT), ParseIntPipe) count: number,
-    @Query('type') type: PostType,
-    @Query('tagName') tagName: string,
-    @Query('userId') userId: string,
-    @Query('sort', new DefaultValuePipe(SortType.Desc)) sort: SortType
-  ) {
-    const posts = await this.postService.getAllPosts({type, tagName, userId, sort, count});
+  public async index(@Query() query: PostQuery) {
+    const posts = await this.postService.getAllPosts(query);
 
-    return fillDto(PostRDO, posts.map((post) => post.toObject()), {exposeDefaultValues: false});
+    return fillDto(PostWithPaginationRDO, {...posts, entities: posts.entities.map((post) => post.toObject())}, {exposeDefaultValues: false});
   }
 
   @ApiResponse({
@@ -105,11 +95,8 @@ export class PostController {
     description: NOT_AUTHORIZED_RESPONSE
   })
   @Get(Route.Draft)
-  public async getDrafts(
-    @Query('sort', new DefaultValuePipe(SortType.Desc)) sort: SortType,
-    @Query('count', new DefaultValuePipe(DEFAULT_MAX_POST_COUNT), ParseIntPipe) count: number
-  ) {
-    const posts = await this.postService.getPostsByDraftStatus({sort, count});
+  public async getDrafts() {
+    const posts = await this.postService.getPostsByDraftStatus('66e87f4f646c29eff76565a8');
 
     return fillDto(PostRDO, posts.map((post) => post.toObject()), {exposeDefaultValues: false});
   }
@@ -159,5 +146,16 @@ export class PostController {
   @HttpCode(204)
   public async delete(@Param('id') id: string) {
     await this.postService.deletePostById(id);
+  }
+
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: POSTS_FOUND_RESPONSE
+  })
+  @Post(Route.PostParam)
+  public async search(@Query('title') title: string) {
+    const posts = await this.postService.searchPostByTittle(title);
+
+    return fillDto(PostRDO, posts.map((post) => post.toObject()), {exposeDefaultValues: false});
   }
 }

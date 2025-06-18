@@ -1,6 +1,14 @@
+import { InternalServerErrorException } from '@nestjs/common';
+
 import { Entity } from '@project/lib/core';
 import { PostTags } from '@project/lib/shared/app/types';
 import { CreatePostTagDTO } from './dto/create-post-tags.dto';
+import {
+  LENGTH_VALIDATE,
+  REGEXP,
+  START_WITH_LETTER_VALIDATE,
+  TagLength
+} from './post-tags.constant';
 
 export class PostTagsEntity implements PostTags, Entity<string, PostTags> {
   public id?: string;
@@ -26,20 +34,25 @@ export class PostTagsEntity implements PostTags, Entity<string, PostTags> {
 
   static fromDto(dto: CreatePostTagDTO) {
     const entity = new PostTagsEntity();
-    entity.tags = this.toUniqueArray(dto.tags)
+    this.validationTag(dto.tags);
+    entity.tags = this.toUniqueArray(dto.tags).map((tag) => tag.toLowerCase());
 
     return entity;
   }
 
-  static toUniqueArray(tags: string) {
-    const tagList = tags
-      .split(/\s*#\s*/)
-      .filter(Boolean)
-      .map((element) => element
-        .replace(/(.)/,'#$1')
-        .toLowerCase()
-      );
+  static validationTag(tags: string[]) {
+    tags.forEach((tag) => {
+      if (!REGEXP.test(tag.at(0))) {
+        throw new InternalServerErrorException(START_WITH_LETTER_VALIDATE);
+      }
 
-    return [...new Set(tagList).values()];
+      if (tag.length < TagLength.MIN || tag.length > TagLength.MAX) {
+        throw new InternalServerErrorException(LENGTH_VALIDATE);
+      }
+    });
+  }
+
+  static toUniqueArray(tags: string[]) {
+    return [...new Set(tags).values()];
   }
 }
