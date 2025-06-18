@@ -5,6 +5,26 @@
   "projectType": "application",
   "tags": [],
   "targets": {
+    "build": {
+      "executor": "@nx/webpack:webpack",
+      "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
+      "options": {
+        "target": "node",
+        "compiler": "tsc",
+        "outputPath": "dist/apps/notifications",
+        "main": "apps/notifications/src/main.ts",
+        "tsConfig": "apps/notifications/tsconfig.app.json",
+        "assets": ["apps/notifications/src/assets"],
+        "isolatedConfig": true,
+        "webpackConfig": "apps/notifications/webpack.config.js",
+        "generatePackageJson": true
+      },
+      "configurations": {
+        "development": {},
+        "production": {}
+      }
+    },
     "serve": {
       "executor": "@nx/js:node",
       "defaultConfiguration": "development",
@@ -20,6 +40,24 @@
         "production": {
           "buildTarget": "notifications:build:production"
         }
+      }
+    },
+    "docker-build": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "docker build -f ./apps/notifications/Dockerfile . --tag readme-notifications:1.0 --no-cache"
+      },
+      "dependsOn": [
+        {
+          "target": "build",
+          "projects": "self"
+        }
+      ]
+    },
+    "docker-start": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "nx run notifications:docker-build"
       }
     }
   }

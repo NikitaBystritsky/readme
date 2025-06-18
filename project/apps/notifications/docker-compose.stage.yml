@@ -1,0 +1,51 @@
+version: '3.9'
+services:
+  readme-notifications-mongoDB:
+    image: mongo:7.0
+    container_name: readme-notifications-mongo
+    restart: always
+    env_file:
+      - .stage.env
+    ports:
+      - ${MONGO_DB_PORT}:27017
+    volumes:
+      - readme-notifications-data:/data/db
+    networks:
+      - readme-network
+  readme-notifications-app:
+    image: readme-notifications:1.0
+    container_name: readme-notifications-app
+    depends_on:
+      - readme-notifications-mongoDB
+    restart: always
+    env_file:
+      - .stage.env
+    ports:
+      - ${PORT}:5030
+    networks:
+      - readme-network
+  readme-notifications-smtp-server:
+    image: gessnerfl/fake-smtp-server
+    container_name: readme-notifications-fake-smtp-server
+    hostname: readme-notifications-fake-smtp-server
+    ports:
+      - ${FAKE_SMTP_PORT}:8025
+      - ${FAKE_SMTP_UI_PORT}:8080
+    networks:
+      - readme-network
+  readme-notifications-rabbitmq:
+    image: rabbitmq:4.0.5-management
+    container_name: readme-notifications-rabbit
+    env_file:
+      - .stage.env
+    ports:
+      - ${RABBITMQ_MANAGEMENT_PORT}:15672
+      - ${RABBITMQ_PORT}:5672
+    networks:
+      - readme-network
+networks:
+  readme-network:
+    name: readme-network
+    driver: bridge
+volumes:
+  readme-notifications-data:

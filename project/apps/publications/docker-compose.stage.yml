@@ -1,0 +1,32 @@
+version: '3.9'
+services:
+  readme-publications-postgresDB:
+    image: postgres:16.4
+    container_name: readme-publications-postgres
+    restart: always
+    shm_size: 128mb
+    env_file:
+      - .stage.env
+    volumes:
+      - readme-publications-postgres-data:/var/lib/postgresql/data
+    networks:
+      - readme-network
+  readme-publications-app:
+    image: readme-publications:1.0
+    container_name: readme-publications-app
+    depends_on:
+      - readme-publications-postgresDB
+    restart: always
+    env_file:
+      - .stage.env
+    ports:
+      - ${PORT}:5010
+    command: sh -c "npx prisma migrate deploy --schema schema.prisma && node ./main.js"
+    networks:
+      - readme-network
+networks:
+  readme-network:
+    name: readme-network
+    driver: bridge
+volumes:
+  readme-publications-postgres-data:
