@@ -52,9 +52,12 @@ export class CommentRepository extends BasePostgresRepository<CommentEntity, Com
     return entity;
   }
 
-  public async deleteById(id: CommentEntity['id']): Promise<void> {
+  public async deleteById(id: CommentEntity['id'], userId: string): Promise<void> {
     await this.prismaClient.comment.delete({
-      where: {id}
+      where: {
+        id,
+        userId
+      }
     });
   }
 }

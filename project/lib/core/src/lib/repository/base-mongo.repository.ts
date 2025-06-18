@@ -23,13 +23,7 @@ export abstract class BaseMongoRepository<
       return null;
     }
     const options: ToObjectOptions = {
-      transform(_doc, ret) {
-        ret.id = ret._id.toString();
-        delete ret._id;
-
-        return ret;
-      },
-      versionKey: true
+      versionKey: false
     };
 
     return this.createEntity(document.toObject(options));

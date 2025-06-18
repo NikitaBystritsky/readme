@@ -1,12 +1,23 @@
-import { Body, Controller, Get, HttpCode, HttpStatus, Param, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  HttpCode,
+  HttpStatus,
+  Param, Post,
+  UseGuards
+} from '@nestjs/common';
 
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
 
 import { fillDto } from '@project/lib/shared/helpers';
 
+import { MongoIdValidationPipe } from '@project/lib/core';
+
 import { AuthService } from './auth.service';
 import { CreateUserDTO } from './dto/create-user.dto';
 import { LoginUserDTO } from './dto/login-user.dto';
+import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { NewUserRDO } from './rdo/new-user.rdo';
 import { LoggedUserRDO } from './rdo/logged-user.rdo';
 import { UserRDO } from './rdo/user.rdo';
@@ -64,8 +75,9 @@ export class AuthController {
   @HttpCode(200)
   public async login(@Body() dto: LoginUserDTO) {
     const verifiedUser = await this.authService.verifyUser(dto);
+    const token = await this.authService.createToken(verifiedUser)
 
-    return fillDto(LoggedUserRDO, verifiedUser.toObject());
+    return fillDto(LoggedUserRDO, {...verifiedUser.toObject(), ...token});
   }
 
   @ApiResponse({
@@ -76,9 +88,10 @@ export class AuthController {
     status: HttpStatus.CONFLICT,
     description: NOT_FOUND_BY_ID_RESPONSE
   })
+  @UseGuards(JwtAuthGuard)
   @Get(Route.UserParam)
   @HttpCode(200)
-  public async show(@Param('id') id: string) {
+  public async show(@Param('id', MongoIdValidationPipe) id: string) {
     const user = await this.authService.getUser(id);
 
     return fillDto(UserRDO, user.toObject());

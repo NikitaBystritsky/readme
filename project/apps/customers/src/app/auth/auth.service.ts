@@ -1,5 +1,13 @@
-import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
+import {
+  HttpException,
+  HttpStatus,
+  Injectable,
+  Logger,
+  NotFoundException,
+  UnauthorizedException
+} from '@nestjs/common';
 
+import { Token, TokenPayload, User } from '@project/lib/shared/app/types';
 import { createMessage } from '@project/lib/shared/helpers';
 
 import { UserRepository } from '../user/user.repository';
@@ -8,15 +16,21 @@ import { LoginUserDTO } from './dto/login-user.dto';
 import {
   NOT_FOUND_BY_EMAIL_MESSAGE,
   NOT_FOUND_BY_ID_MESSAGE,
+  TOKEN_CREATION_ERROR,
+  TOKEN_GENERATE_ERROR,
   USER_EXISTS_MESSAGE,
   WRONG_PASSWORD_MESSAGE
 } from './auth.constant';
 import { UserEntity } from '../user/user.entity';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class AuthService {
+  private readonly logger = new Logger(AuthService.name);
+
   constructor(
-    private readonly userRepository: UserRepository
+    private readonly userRepository: UserRepository,
+    private readonly jwtService: JwtService,
   ) {}
 
   public async registerUser(dto: CreateUserDTO): Promise<UserEntity> {
@@ -59,5 +73,22 @@ export class AuthService {
     }
 
     return existUser;
+  }
+
+  public async createToken(user: User): Promise<Token> {
+    const payload: TokenPayload = {
+      email: user.email,
+      fullName: user.fullName,
+      avatar: user.avatar,
+      createdAt: user.createdAt
+    }
+
+    try {
+      const accessToken = await this.jwtService.signAsync(payload);
+      return {accessToken};
+    } catch (error) {
+      this.logger.error(createMessage(TOKEN_GENERATE_ERROR, [error.message]));
+      throw new HttpException(TOKEN_CREATION_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
   }
 }

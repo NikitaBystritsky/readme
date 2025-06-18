@@ -7,7 +7,9 @@ import { SCHEMA_COLLECTION } from './user.constant';
 
 @Schema({
   collection: SCHEMA_COLLECTION,
-  timestamps: true
+  timestamps: true,
+  toJSON: { virtuals: true },
+  toObject: { virtuals: true }
 })
 export class UserModel extends Document implements ExtendUser {
   @Prop({
@@ -31,3 +33,7 @@ export class UserModel extends Document implements ExtendUser {
 }
 
 export const UserSchema = SchemaFactory.createForClass(UserModel);
+
+UserSchema.virtual('id').get(function() {
+  return this._id.toString();
+});

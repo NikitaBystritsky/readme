@@ -15,8 +15,8 @@ export class CommentService {
     private readonly postService: PostService
   ) {}
 
-  public async getCommentById(id: string) {
-    return this.commentRepository.findById(id);
+  public async getCommentById(commentId: string) {
+    return this.commentRepository.findById(commentId);
   }
 
   public async getCommentsByPostId(postId: string, {count}) {
@@ -30,11 +30,11 @@ export class CommentService {
     return this.commentRepository.save(newComment);
   }
 
-  public async deleteCommentById(id: string) {
+  public async deleteCommentById(commentId: string, userId: string) {
     try {
-      await this.commentRepository.deleteById(id);
+      await this.commentRepository.deleteById(commentId, userId);
     } catch {
-      throw new NotFoundException(createMessage(NOT_FOUND_BY_ID_MESSAGE, [id]));
+      throw new NotFoundException(createMessage(NOT_FOUND_BY_ID_MESSAGE, [commentId]));
     }
   }
 }
