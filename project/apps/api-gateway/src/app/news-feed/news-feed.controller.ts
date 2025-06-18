@@ -14,7 +14,7 @@ import { ApiOperation, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 
 import { PostQuery } from '@project/lib/shared/app/query';
 import { ApiGatewayAppConfig } from '@project/lib/config/api-gateway';
-import { Post, Route, TokenPayload } from '@project/lib/shared/app/types';
+import { Pagination, Post, Route, TokenPayload } from '@project/lib/shared/app/types';
 
 import {
   GET_BY_TAG_API_QUERY,
@@ -35,6 +35,7 @@ import { AxiosExceptionFilter } from '../filters/axios-exception.filter';
 import { CheckAuthGuard } from '../guards/check-auth.guard';
 import { RequestHeader } from '../decorators/request-header.decorator';
 import { RequestTokenPayload } from '../decorators/request-token-payload.decorator';
+import { fetchUserData } from '@project/lib/shared/helpers';
 
 @ApiTags(NEWS_FEED_TAG)
 @Controller(NEWS_FEED_ROUTE_PREFIX)
@@ -117,14 +118,17 @@ export class NewsFeedController {
     const { data: subscriptions } = await this.httpService.axiosRef.get<string[]>(usersURL,
       { headers: { 'Authorization': authHeader }
     });
+    const ids = subscriptions.concat(tokenPayload.sub);
     const postsURL = new URL('news-feed', this.apiGatewayOptions.postsServiceURL).toString();
-    const { data } = await this.httpService.axiosRef.post<Post[]>(postsURL,
-      { ids: subscriptions.concat(tokenPayload.sub) },
+    const { data } = await this.httpService.axiosRef.post<Pagination<Post>>(postsURL,
+      { ids },
       {
         headers: { 'Authorization': authHeader },
         params: { query }
       }
     );
+    const users = await fetchUserData(ids, this.apiGatewayOptions.usersServiceURL);
+    data.entities.map((post) => post.user = users.find((user) => user.id === post.user));
 
     return data;
   }

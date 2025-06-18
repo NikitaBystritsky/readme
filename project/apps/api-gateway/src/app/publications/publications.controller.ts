@@ -113,7 +113,7 @@ export class PublicationsController {
     @RequestContentType() contentType: string,
     @UploadedFile() file: Express.Multer.File,
   ) {
-    const user = await fetchUserData(dto.userId);
+    const user = await fetchUserData(dto.userId, this.apiGatewayOptions.usersServiceURL);
 
     if (contentType.includes('multipart/form-data') && file && dto.type === POST_TYPE) {
       const formData = new FormData();
@@ -183,7 +183,7 @@ export class PublicationsController {
         params: { userId: tokenPayload.sub }
       }
     );
-    data.user = await fetchUserData(data.user);
+    data.user = await fetchUserData(data.user, this.apiGatewayOptions.usersServiceURL);
 
     return data;
   }
@@ -250,7 +250,7 @@ export class PublicationsController {
     const url = new URL(this.apiGatewayOptions.postsServiceURL).toString();
     const { data } = await this.httpService.axiosRef.get<Pagination<PostType>>(url, { params: query });
     const userIds = data.entities.map((post) => post.user as string);
-    const users = await fetchUserData(userIds);
+    const users = await fetchUserData(userIds, this.apiGatewayOptions.usersServiceURL);
     data.entities.map((post) => post.user = users.find((user) => user.id === post.user));
 
     return data;
@@ -281,7 +281,7 @@ export class PublicationsController {
       params: { userId: tokenPayload.sub }
     });
     const userIds = data.map((post) => post.user as string);
-    const users = await fetchUserData(userIds);
+    const users = await fetchUserData(userIds, this.apiGatewayOptions.usersServiceURL);
     data.map((post) => post.user = users.find((user) => user.id === post.user));
 
     return data;
@@ -309,7 +309,7 @@ export class PublicationsController {
   public async show(@Param('id') id: string) {
     const url = new URL(id, this.apiGatewayOptions.postsServiceURL).toString();
     const { data } = await this.httpService.axiosRef.get(url);
-    data.user = await fetchUserData(data.user);
+    data.user = await fetchUserData(data.user, this.apiGatewayOptions.usersServiceURL);
 
     return data;
   }
@@ -351,7 +351,7 @@ export class PublicationsController {
     const { data } = await this.httpService.axiosRef.patch(url, dto, {
       headers: { 'Authorization': authHeader }
     });
-    data.user = await fetchUserData(data.user);
+    data.user = await fetchUserData(data.user, this.apiGatewayOptions.usersServiceURL);
 
     return data;
   }
@@ -411,7 +411,7 @@ export class PublicationsController {
       params: { title }
     });
     const userIds = data.map((post) => post.user as string);
-    const users = await fetchUserData(userIds);
+    const users = await fetchUserData(userIds, this.apiGatewayOptions.usersServiceURL);
     data.map((post) => post.user = users.find((user) => user.id === post.user));
 
     return data;

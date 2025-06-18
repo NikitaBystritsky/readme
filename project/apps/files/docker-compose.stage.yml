@@ -1,0 +1,32 @@
+version: '3.9'
+services:
+  readme-files-mongoDB:
+    image: mongo:7.0
+    container_name: readme-files-mongo
+    restart: always
+    env_file:
+      - .stage.env
+    ports:
+      - ${MONGO_DB_PORT}:27017
+    volumes:
+      - readme-files-data:/data/db
+    networks:
+      - readme-network
+  readme-files-app:
+    image: readme-files:1.0
+    container_name: readme-files-app
+    depends_on:
+      - readme-files-mongoDB
+    restart: always
+    env_file:
+      - .stage.env
+    ports:
+      - ${PORT}:5020
+    networks:
+      - readme-network
+networks:
+  readme-network:
+    name: readme-network
+    driver: bridge
+volumes:
+  readme-files-data:

@@ -5,6 +5,26 @@
   "projectType": "application",
   "tags": [],
   "targets": {
+    "build": {
+      "executor": "@nx/webpack:webpack",
+      "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
+      "options": {
+        "target": "node",
+        "compiler": "tsc",
+        "outputPath": "dist/apps/files",
+        "main": "apps/files/src/main.ts",
+        "tsConfig": "apps/files/tsconfig.app.json",
+        "assets": ["apps/files/src/assets"],
+        "isolatedConfig": true,
+        "webpackConfig": "apps/files/webpack.config.js",
+        "generatePackageJson": true
+      },
+      "configurations": {
+        "development": {},
+        "production": {}
+      }
+    },
     "serve": {
       "executor": "@nx/js:node",
       "defaultConfiguration": "development",
@@ -20,6 +40,24 @@
         "production": {
           "buildTarget": "files:build:production"
         }
+      }
+    },
+    "docker-build": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "docker build -f ./apps/files/Dockerfile . --tag readme-files:1.0 --no-cache"
+      },
+      "dependsOn": [
+        {
+          "target": "build",
+          "projects": "self"
+        }
+      ]
+    },
+    "docker-start": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "nx run files:docker-build"
       }
     }
   }

@@ -2,7 +2,7 @@ import { ClassTransformOptions, plainToInstance } from 'class-transformer';
 
 import { HttpService } from '@nestjs/axios';
 
-import { REGEX, TIME_REGEX, USER_URL, VALUE_PARSE_ERROR, WRONG_TIME_ERROR } from './helpers.constant';
+import { REGEX, TIME_REGEX, VALUE_PARSE_ERROR, WRONG_TIME_ERROR } from './helpers.constant';
 import { DateTimeUnit, TimeAndUnit } from './helpers.types';
 import { User } from '@project/lib/shared/app/types';
 
@@ -52,20 +52,21 @@ export function parseTime(time: string): TimeAndUnit {
   return {value, unit}
 }
 
-export async function fetchUserData(data: string, req?: Request): Promise<User>;
+export async function fetchUserData(data: string, url: string, req?: Request): Promise<User>;
 
-export async function fetchUserData(data: string[], req?: Request): Promise<User[]>;
+export async function fetchUserData(data: string[], url: string, req?: Request): Promise<User[]>;
 
-export async function fetchUserData(data: string[] | string, req?: Request): Promise<User | User[]> {
+export async function fetchUserData(data: string[] | string, url: string, req?: Request): Promise<User | User[]> {
   const httpService = new HttpService();
-
   if (typeof data === 'string') {
-    const { data: user } = await httpService.axiosRef.get<User>(`${USER_URL}/${data}`);
+    const userURL = new URL(data, url).toString();
+    const { data: user } = await httpService.axiosRef.get<User>(userURL);
 
     return user;
   }
   const uniqueIds = new Set(data);
-  const { data: users } = await httpService.axiosRef.post<User[]>(USER_URL,
+  const userURL = new URL(url).toString();
+  const { data: users } = await httpService.axiosRef.post<User[]>(userURL,
     { userIds: [...uniqueIds] },
     { headers: { 'Authorization': req?.headers['authorization'] } }
   );
