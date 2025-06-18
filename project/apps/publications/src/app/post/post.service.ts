@@ -16,7 +16,7 @@ import { QuotePostService } from '../quote-post/quote-post.service';
 import { PhotoPostService } from '../photo-post/photo-post.service';
 import { PostEntity } from './post.entity';
 import { PostTagsEntity } from '../post-tags/post-tags.entity';
-import { NOT_FOUND_BY_ID_MESSAGE, REPOST_ERROR_MESSAGE } from './post.constant';
+import { NOT_FOUND_BY_ID_MESSAGE, POST_REPOST_ERROR_MESSAGE, REPOST_ERROR_MESSAGE } from './post.constant';
 import { PostContent } from './post.type';
 
 @Injectable()
@@ -60,6 +60,11 @@ export class PostService {
 
   public async repostPost(id: string, userId: string) {
     const existsPost = await this.postRepository.findById(id);
+    const repost = await this.postRepository.findByOriginalId(existsPost.id);
+
+    if(repost) {
+      throw new BadRequestException(POST_REPOST_ERROR_MESSAGE);
+    }
 
     if(existsPost.repost) {
       throw new BadRequestException(REPOST_ERROR_MESSAGE);

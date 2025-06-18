@@ -1,5 +1,6 @@
 import { ConfigType } from '@nestjs/config';
 import {
+  BadRequestException,
   ConflictException,
   Inject,
   Injectable,
@@ -100,7 +101,7 @@ export class AuthService {
     const isMatch = await existUser.comparePassword(dto.oldPassword);
 
     if(!isMatch) {
-      throw new UnauthorizedException(WRONG_PASSWORD_MESSAGE);
+      throw new BadRequestException(WRONG_PASSWORD_MESSAGE);
     }
     existUser.setPassword(dto.password)
 

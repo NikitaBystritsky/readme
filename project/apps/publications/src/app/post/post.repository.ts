@@ -124,6 +124,16 @@ export class PostRepository extends BasePostgresRepository<PostEntity, Post> {
     }, record));
   }
 
+  public async findByOriginalId(id: PostEntity['id']): Promise<PostEntity> {
+    const record = await this.prismaClient.publication.findFirst({
+      where: {
+        originalPublicationId: id
+      }
+    })
+
+    return this.createEntityFromDocument(structuredClone(record));
+  }
+
   public async findByDraftStatus(userId: string) {
     const records = await this.prismaClient.publication.findMany({
       where: {

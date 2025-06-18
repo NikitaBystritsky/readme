@@ -28,6 +28,7 @@ import {
   POST_DELETE_RESPONSE,
   POST_FOUND_RESPONSE,
   POST_NOT_FOUND_RESPONSE,
+  POST_REPOST_ERROR_MESSAGE,
   POST_REPOSTED_RESPONSE,
   POST_UPDATE_RESPONSE,
   POSTS_COUNT_FOUND_RESPONSE,
@@ -73,6 +74,10 @@ export class PostController {
   @ApiResponse({
     status: HttpStatus.BAD_REQUEST,
     description: REPOST_ERROR_MESSAGE
+  })
+  @ApiResponse({
+    status: HttpStatus.BAD_REQUEST,
+    description: POST_REPOST_ERROR_MESSAGE
   })
   @ApiResponse({
     status: HttpStatus.UNAUTHORIZED,

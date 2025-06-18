@@ -3,6 +3,7 @@ import 'multer';
 import FormData from 'form-data';
 
 import { HttpService } from '@nestjs/axios';
+import { ConfigType } from '@nestjs/config';
 import {
   Body,
   Controller,
@@ -10,11 +11,11 @@ import {
   Get,
   HttpCode,
   HttpStatus,
+  Inject,
   Param,
   Patch,
   Post,
   Query,
-  Req,
   UploadedFile,
   UseFilters,
   UseGuards,
@@ -23,6 +24,7 @@ import {
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiOperation, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 
+import { ApiGatewayAppConfig } from '@project/lib/config/api-gateway';
 import { ParseFormDataJsonPipe } from '@project/lib/core';
 import { fetchUserData } from '@project/lib/shared/helpers';
 import { CreatePostDTO, UpdatePostDTO } from '@project/lib/shared/app/dto';
@@ -30,16 +32,18 @@ import { PostQuery } from '@project/lib/shared/app/query';
 import {
   Pagination,
   Post as PostType,
-  RequestWithTokenPayload,
   Route,
+  TokenPayload,
   UploadCatalog
 } from '@project/lib/shared/app/types';
 
-import { AxiosExceptionFilter } from './filters/axios-exception.filter';
-import { UserIdInterceptor } from './interceptor/userid.interceptor';
-import { CheckAuthGuard } from './guards/check-auth.guard';
+import { AxiosExceptionFilter } from '../filters/axios-exception.filter';
+import { UserIdInterceptor } from '../interceptor/userid.interceptor';
+import { RequestHeader } from '../decorators/request-header.decorator';
+import { RequestContentType } from '../decorators/request-content-type.decorator';
+import { RequestTokenPayload } from '../decorators/request-token-payload.decorator';
+import { CheckAuthGuard } from '../guards/check-auth.guard';
 import {
-  ApplicationServiceURL,
   GET_BY_TAG_API_QUERY,
   GET_BY_TYPE_API_QUERY,
   GET_BY_USER_API_QUERY,
@@ -70,15 +74,17 @@ import {
   PUBLICATION_TAG,
   REPOST_ERROR_MESSAGE,
   SEARCH_BY_TITTLE_API_QUERY,
-  VALIDATION_ERROR_RESPONSE
-} from './app.constant';
+  VALIDATION_ERROR_RESPONSE,
+  POST_REPOST_ERROR_MESSAGE
+} from './publications.constant';
 
 @ApiTags(PUBLICATION_TAG)
 @Controller(PUBLICATION_ROUTE_PREFIX)
 @UseFilters(AxiosExceptionFilter)
 export class PublicationsController {
   constructor(
-      private readonly httpService: HttpService
+      private readonly httpService: HttpService,
+      @Inject(ApiGatewayAppConfig.KEY) private readonly apiGatewayOptions: ConfigType<typeof ApiGatewayAppConfig>
   ) {}
 
   @ApiResponse({
@@ -102,11 +108,11 @@ export class PublicationsController {
   @HttpCode(HttpStatus.CREATED)
   @Post(Route.Create)
   public async create(
-    @Req() req: Request,
+    @Body(ParseFormDataJsonPipe) dto: CreatePostDTO,
+    @RequestHeader('authorization') authHeader: string,
+    @RequestContentType() contentType: string,
     @UploadedFile() file: Express.Multer.File,
-    @Body(ParseFormDataJsonPipe) dto: CreatePostDTO
   ) {
-    const contentType = req.headers['content-type'];
     const user = await fetchUserData(dto.userId);
 
     if (contentType.includes('multipart/form-data') && file && dto.type === POST_TYPE) {
@@ -115,22 +121,22 @@ export class PublicationsController {
         filename: file.originalname,
         contentType: file.mimetype
       });
-      const { data: image } = await this.httpService.axiosRef.post(`${ApplicationServiceURL.Files}/upload`, formData,
-        { headers: { ...formData.getHeaders() }}
+      const filesURL = new URL('upload', this.apiGatewayOptions.filesServiceURL).toString();
+      const { data: image } = await this.httpService.axiosRef.post(filesURL, formData,
+        { headers: formData.getHeaders() }
       );
-      const { data } = await this.httpService.axiosRef.post(`${ApplicationServiceURL.Posts}`,
-        {
-          ...dto,
-          image: image.hashName
-        },
-        { headers: { 'Authorization': req.headers['authorization'] }}
+      const postsURL = new URL(this.apiGatewayOptions.postsServiceURL).toString();
+      const { data } = await this.httpService.axiosRef.post(postsURL,
+        Object.assign(dto, { image: image.hashName }),
+        { headers: { 'Authorization': authHeader }}
       );
       data.user = user;
 
       return data;
     }
-    const { data } = await this.httpService.axiosRef.post(`${ApplicationServiceURL.Posts}`, dto,
-      { headers: { 'Authorization': req.headers['authorization'] }}
+    const url = new URL(this.apiGatewayOptions.postsServiceURL).toString();
+    const { data } = await this.httpService.axiosRef.post(url, dto,
+      { headers: { 'Authorization': authHeader }}
     );
     data.user = user;
 
@@ -144,6 +150,10 @@ export class PublicationsController {
   @ApiResponse({
     status: HttpStatus.BAD_REQUEST,
     description: REPOST_ERROR_MESSAGE
+  })
+  @ApiResponse({
+    status: HttpStatus.BAD_REQUEST,
+    description: POST_REPOST_ERROR_MESSAGE
   })
   @ApiResponse({
     status: HttpStatus.UNAUTHORIZED,
@@ -161,11 +171,16 @@ export class PublicationsController {
   @UseGuards(CheckAuthGuard)
   @HttpCode(HttpStatus.CREATED)
   @Post(Route.Repost)
-  public async repost(@Param('id') id: string, @Req() req: RequestWithTokenPayload) {
-    const { data } = await this.httpService.axiosRef.post(`${ApplicationServiceURL.Posts}/${id}/repost`, null,
+  public async repost(
+    @Param('id') id: string,
+    @RequestHeader('authorization') authHeader: string,
+    @RequestTokenPayload() tokenPayload: TokenPayload
+  ) {
+    const url = new URL(`${id}/repost`, this.apiGatewayOptions.postsServiceURL).toString();
+    const { data } = await this.httpService.axiosRef.post(url, null,
       {
-        headers: { 'Authorization': req.headers['authorization'] },
-        params: { userId: req.user?.sub }
+        headers: { 'Authorization': authHeader },
+        params: { userId: tokenPayload.sub }
       }
     );
     data.user = await fetchUserData(data.user);
@@ -232,7 +247,8 @@ export class PublicationsController {
   @HttpCode(HttpStatus.OK)
   @Get(Route.Root)
   public async index(@Query() query: PostQuery) {
-    const { data } = await this.httpService.axiosRef.get<Pagination<PostType>>(`${ApplicationServiceURL.Posts}`, { params: query });
+    const url = new URL(this.apiGatewayOptions.postsServiceURL).toString();
+    const { data } = await this.httpService.axiosRef.get<Pagination<PostType>>(url, { params: query });
     const userIds = data.entities.map((post) => post.user as string);
     const users = await fetchUserData(userIds);
     data.entities.map((post) => post.user = users.find((user) => user.id === post.user));
@@ -255,10 +271,14 @@ export class PublicationsController {
   @UseGuards(CheckAuthGuard)
   @HttpCode(HttpStatus.OK)
   @Get(Route.Draft)
-  public async getDrafts(@Req() req: RequestWithTokenPayload) {
-    const { data } = await this.httpService.axiosRef.get<PostType[]>(`${ApplicationServiceURL.Posts}/draft`,{
-      headers: { 'Authorization': req.headers['authorization'] },
-      params: { userId: req.user?.sub }
+  public async getDrafts(
+    @RequestHeader('authorization') authHeader: string,
+    @RequestTokenPayload() tokenPayload: TokenPayload
+  ) {
+    const url = new URL('draft', this.apiGatewayOptions.postsServiceURL).toString();
+    const { data } = await this.httpService.axiosRef.get<PostType[]>(url, {
+      headers: { 'Authorization': authHeader },
+      params: { userId: tokenPayload.sub }
     });
     const userIds = data.map((post) => post.user as string);
     const users = await fetchUserData(userIds);
@@ -287,7 +307,8 @@ export class PublicationsController {
   @HttpCode(HttpStatus.OK)
   @Get(Route.Param)
   public async show(@Param('id') id: string) {
-    const { data } = await this.httpService.axiosRef.get(`${ApplicationServiceURL.Posts}/${id}`);
+    const url = new URL(id, this.apiGatewayOptions.postsServiceURL).toString();
+    const { data } = await this.httpService.axiosRef.get(url);
     data.user = await fetchUserData(data.user);
 
     return data;
@@ -323,11 +344,12 @@ export class PublicationsController {
   @Patch(Route.Update)
   public async update(
     @Param('id') id: string,
-    @Req() req: Request,
+    @RequestHeader('authorization') authHeader: string,
     @Body() dto: UpdatePostDTO
   ) {
-    const { data } = await this.httpService.axiosRef.patch(`${ApplicationServiceURL.Posts}/${id}/update`, dto, {
-      headers: { 'Authorization': req.headers['authorization'] }
+    const url = new URL(`${id}/update`, this.apiGatewayOptions.postsServiceURL).toString();
+    const { data } = await this.httpService.axiosRef.patch(url, dto, {
+      headers: { 'Authorization': authHeader }
     });
     data.user = await fetchUserData(data.user);
 
@@ -360,10 +382,11 @@ export class PublicationsController {
   @Delete(Route.Param)
   public async delete(
     @Param('id') id: string,
-    @Req() req: Request
+    @RequestHeader('authorization') authHeader: string
   ) {
-    await this.httpService.axiosRef.delete(`${ApplicationServiceURL.Posts}/${id}`,
-      { headers: { 'Authorization': req.headers['authorization'] } }
+    const url = new URL(id, this.apiGatewayOptions.postsServiceURL).toString();
+    await this.httpService.axiosRef.delete(url,
+      { headers: { 'Authorization': authHeader } }
     );
   }
 
@@ -383,7 +406,8 @@ export class PublicationsController {
   @HttpCode(HttpStatus.OK)
   @Post(Route.Search)
   public async search(@Query('title') title: string) {
-    const { data } = await this.httpService.axiosRef.post<PostType[]>(`${ApplicationServiceURL.Posts}/search`, null, {
+    const url = new URL('search', this.apiGatewayOptions.postsServiceURL).toString();
+    const { data } = await this.httpService.axiosRef.post<PostType[]>(url, null, {
       params: { title }
     });
     const userIds = data.map((post) => post.user as string);

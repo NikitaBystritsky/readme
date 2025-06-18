@@ -55,7 +55,7 @@ Content-Type: application/json
 # Update password.
 
 PATCH http://localhost:4000/api/users/67c8224cf747181b904abfec/update HTTP/1.1
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2N2M4MjI4ZWY3NDcxODFiOTA0YWJmZWYiLCJlbWFpbCI6InZva3NoaW5AeWEucnUiLCJpYXQiOjE3NDExOTc0NDcsImV4cCI6MTc0MTIwMTA0N30.gkMmJWfKsoGJk0jlp3O5_jg_qas_5vf74p5ozC4yF3o
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2N2M4MjI4ZWY3NDcxODFiOTA0YWJmZWYiLCJlbWFpbCI6InZva3NoaW5AeWEucnUiLCJpYXQiOjE3NDE2NzUzMzIsImV4cCI6MTc0MTY3ODkzMn0.P0fDH6d-ayVbdf1NnGFO9p-mif779xQ04tCS6tu-Xec
 Content-Type: application/json
 
 {
@@ -67,21 +67,21 @@ Content-Type: application/json
 # Subscribe or unsubscribe to a user by ID.
 
 POST http://localhost:4000/api/users/67c8228ef747181b904abfef/subscribe?userId=67c8224cf747181b904abfec HTTP/1.1
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2N2M4MjI0Y2Y3NDcxODFiOTA0YWJmZWMiLCJlbWFpbCI6InVzZXJAbWFpbC5ydSIsImlhdCI6MTc0MTE2OTM4NywiZXhwIjoxNzQxMTcyOTg3fQ.eDtvUfrBBVEYScUvWDAH7AREB1xyEUTfSQtz02h2QC8
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2N2M4MjI4ZWY3NDcxODFiOTA0YWJmZWYiLCJlbWFpbCI6InZva3NoaW5AeWEucnUiLCJpYXQiOjE3NDE2NzY4ODcsImV4cCI6MTc0MTY4MDQ4N30.hKbTkOViTPaAnogmXmmyUGsZphK8CS08P43PnJfe7lY
 Content-Type: application/json
 
 ###
 # Refresh token.
 
 POST http://localhost:4000/api/users/refresh HTTP/1.1
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2N2M4MjI0Y2Y3NDcxODFiOTA0YWJmZWMiLCJlbWFpbCI6InVzZXJAbWFpbC5ydSIsInRva2VuSWQiOiIzY2FmZDBkNy0wYWUzLTRkZTYtODQyNC05OWQ4YzRhNmNmODciLCJpYXQiOjE3NDExNjkzMjAsImV4cCI6MTc0MTc3NDEyMH0.gOSI9f_YgGd0By7bji_lQ0aocpS4PlbTXLibp4AfknQ
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2N2M4MjI4ZWY3NDcxODFiOTA0YWJmZWYiLCJlbWFpbCI6InZva3NoaW5AeWEucnUiLCJ0b2tlbklkIjoiNmI0MDc2OTAtODBiYi00ODM5LWE4Y2UtOGFhNDcxMTA3YmI5IiwiaWF0IjoxNzQxNjc1MjQ5LCJleHAiOjE3NDIyODAwNDl9.9Gnbt_yhyAj8zs1XhL8ccg9Upu3S8GS_-Wx4ikQRD8U
 Content-Type: application/json
 
 ###
 # Create "Video"" publication.
 
 POST http://localhost:4000/api/publications/create HTTP/1.1
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2N2M4MjI4ZWY3NDcxODFiOTA0YWJmZWYiLCJlbWFpbCI6InZva3NoaW5AeWEucnUiLCJpYXQiOjE3NDExODk3ODUsImV4cCI6MTc0MTE5MzM4NX0.KLgO-yaK8bxbMZMCiJjPDgzGCfwL-9p4o9hhJYvlROE
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2N2M4MjI4ZWY3NDcxODFiOTA0YWJmZWYiLCJlbWFpbCI6InZva3NoaW5AeWEucnUiLCJpYXQiOjE3NDE2NzY4ODcsImV4cCI6MTc0MTY4MDQ4N30.hKbTkOViTPaAnogmXmmyUGsZphK8CS08P43PnJfe7lY
 Content-Type: application/json
 
 {
@@ -96,7 +96,7 @@ Content-Type: application/json
 # Create "Quote"" publication.
 
 POST http://localhost:4000/api/publications/create HTTP/1.1
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2N2M4MjI4ZWY3NDcxODFiOTA0YWJmZWYiLCJlbWFpbCI6InZva3NoaW5AeWEucnUiLCJpYXQiOjE3NDExNzA2NDMsImV4cCI6MTc0MTE3NDI0M30.BRJb2FrnkBePL1jE5WmVKrMZj7NUu9jmUtQ92VIY-M0
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2N2M4MjI4ZWY3NDcxODFiOTA0YWJmZWYiLCJlbWFpbCI6InZva3NoaW5AeWEucnUiLCJpYXQiOjE3NDE2NzA3MTYsImV4cCI6MTc0MTY3NDMxNn0.XZL3BeBGK1CvqJmOsNixlc7C4CJb5uaZH4RVNLxfJX4
 Content-Type: application/json
 
 {
@@ -110,7 +110,7 @@ Content-Type: application/json
 # Create "Photo" publication.
 
 POST http://localhost:4000/api/publications/create HTTP/1.1
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2N2M4MjI4ZWY3NDcxODFiOTA0YWJmZWYiLCJlbWFpbCI6InZva3NoaW5AeWEucnUiLCJpYXQiOjE3NDExODYzMzcsImV4cCI6MTc0MTE4OTkzN30.H9B8QCc_IEJRyOfZDR8_c67hajsWSIajkfMPSc-H8d4
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2N2M4MjI4ZWY3NDcxODFiOTA0YWJmZWYiLCJlbWFpbCI6InZva3NoaW5AeWEucnUiLCJpYXQiOjE3NDE2NzY4ODcsImV4cCI6MTc0MTY4MDQ4N30.hKbTkOViTPaAnogmXmmyUGsZphK8CS08P43PnJfe7lY
 Content-Type: multipart/form-data; boundary=MyBoundary
 
 --MyBoundary
@@ -132,7 +132,7 @@ Content-Disposition: form-data; name="data"
 # Create "Link" publication.
 
 POST http://localhost:4000/api/publications/create HTTP/1.1
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2N2M4MjI4ZWY3NDcxODFiOTA0YWJmZWYiLCJlbWFpbCI6InZva3NoaW5AeWEucnUiLCJpYXQiOjE3NDExNzA2NDMsImV4cCI6MTc0MTE3NDI0M30.BRJb2FrnkBePL1jE5WmVKrMZj7NUu9jmUtQ92VIY-M0
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2N2M4MjI4ZWY3NDcxODFiOTA0YWJmZWYiLCJlbWFpbCI6InZva3NoaW5AeWEucnUiLCJpYXQiOjE3NDE2NzA3MTYsImV4cCI6MTc0MTY3NDMxNn0.XZL3BeBGK1CvqJmOsNixlc7C4CJb5uaZH4RVNLxfJX4
 Content-Type: application/json
 
 {
@@ -146,7 +146,7 @@ Content-Type: application/json
 # Create a draft of a "Video" type publication.
 
 POST http://localhost:4000/api/publications/create HTTP/1.1
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2N2M4MjI4ZWY3NDcxODFiOTA0YWJmZWYiLCJlbWFpbCI6InZva3NoaW5AeWEucnUiLCJpYXQiOjE3NDExNzA2NDMsImV4cCI6MTc0MTE3NDI0M30.BRJb2FrnkBePL1jE5WmVKrMZj7NUu9jmUtQ92VIY-M0
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2N2M4MjI4ZWY3NDcxODFiOTA0YWJmZWYiLCJlbWFpbCI6InZva3NoaW5AeWEucnUiLCJpYXQiOjE3NDE2NzA3MTYsImV4cCI6MTc0MTY3NDMxNn0.XZL3BeBGK1CvqJmOsNixlc7C4CJb5uaZH4RVNLxfJX4
 Content-Type: application/json
 
 {
@@ -161,7 +161,7 @@ Content-Type: application/json
 # Create a draft of a "Quote" type publication.
 
 POST http://localhost:4000/api/publications/create HTTP/1.1
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2N2M4MjI4ZWY3NDcxODFiOTA0YWJmZWYiLCJlbWFpbCI6InZva3NoaW5AeWEucnUiLCJpYXQiOjE3NDExNzA2NDMsImV4cCI6MTc0MTE3NDI0M30.BRJb2FrnkBePL1jE5WmVKrMZj7NUu9jmUtQ92VIY-M0
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2N2M4MjI4ZWY3NDcxODFiOTA0YWJmZWYiLCJlbWFpbCI6InZva3NoaW5AeWEucnUiLCJpYXQiOjE3NDE2NzA3MTYsImV4cCI6MTc0MTY3NDMxNn0.XZL3BeBGK1CvqJmOsNixlc7C4CJb5uaZH4RVNLxfJX4
 Content-Type: application/json
 
 {
@@ -175,12 +175,12 @@ Content-Type: application/json
 # Update publication.
 
 PATCH  http://localhost:4000/api/publications/455e812a-e70e-4cc3-9012-d1cf7eece9a8/update HTTP/1.1
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2N2M4MjI4ZWY3NDcxODFiOTA0YWJmZWYiLCJlbWFpbCI6InZva3NoaW5AeWEucnUiLCJpYXQiOjE3NDExODk3ODUsImV4cCI6MTc0MTE5MzM4NX0.KLgO-yaK8bxbMZMCiJjPDgzGCfwL-9p4o9hhJYvlROE
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2N2M4MjI4ZWY3NDcxODFiOTA0YWJmZWYiLCJlbWFpbCI6InZva3NoaW5AeWEucnUiLCJpYXQiOjE3NDE2NzY4ODcsImV4cCI6MTc0MTY4MDQ4N30.hKbTkOViTPaAnogmXmmyUGsZphK8CS08P43PnJfe7lY
 Content-Type: application/json
 
 {
-  "status": "published",
-  "tags": ["Эйнштейн"]
+  "status": "Published",
+  "tags": ["Эйнштейн", "Цитата", "Альберт"]
 }
 
 ###
@@ -241,14 +241,14 @@ Content-Type: application/json
 # Get drafts.
 
 GET http://localhost:4000/api/publications/draft  HTTP/1.1
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2N2M4MjI4ZWY3NDcxODFiOTA0YWJmZWYiLCJlbWFpbCI6InZva3NoaW5AeWEucnUiLCJpYXQiOjE3NDExODk3ODUsImV4cCI6MTc0MTE5MzM4NX0.KLgO-yaK8bxbMZMCiJjPDgzGCfwL-9p4o9hhJYvlROE
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2N2M4MjI4ZWY3NDcxODFiOTA0YWJmZWYiLCJlbWFpbCI6InZva3NoaW5AeWEucnUiLCJpYXQiOjE3NDE2NzY4ODcsImV4cCI6MTc0MTY4MDQ4N30.hKbTkOViTPaAnogmXmmyUGsZphK8CS08P43PnJfe7lY
 Content-Type: application/json
 
 ###
 # A repost of a publication.
 
-POST http://localhost:4000/api/publications/455e812a-e70e-4cc3-9012-d1cf7eece9a8/repost  HTTP/1.1
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2N2M4MjI4ZWY3NDcxODFiOTA0YWJmZWYiLCJlbWFpbCI6InZva3NoaW5AeWEucnUiLCJpYXQiOjE3NDExODk3ODUsImV4cCI6MTc0MTE5MzM4NX0.KLgO-yaK8bxbMZMCiJjPDgzGCfwL-9p4o9hhJYvlROE
+POST http://localhost:4000/api/publications/69671e5e-87ab-4f58-b25d-04a4db04c54e/repost  HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2N2M4MjI4ZWY3NDcxODFiOTA0YWJmZWYiLCJlbWFpbCI6InZva3NoaW5AeWEucnUiLCJpYXQiOjE3NDE2ODA4MjMsImV4cCI6MTc0MTY4NDQyM30.gy0IpcnORo2VC7LXIBnWU-1dXN4axji_N6hZVR2tuyA
 Content-Type: application/json
 
 ###
@@ -268,7 +268,7 @@ Content-Type: application/json
 # Create comment for publication.
 
 POST http://localhost:4000/api/publications/5ec9343c-ee5e-47fa-8dd2-64504ceccf37/comments HTTP/1.1
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2N2M4MjI4ZWY3NDcxODFiOTA0YWJmZWYiLCJlbWFpbCI6InZva3NoaW5AeWEucnUiLCJpYXQiOjE3NDExNzMxMjEsImV4cCI6MTc0MTE3NjcyMX0.975GH8wWwv8j48Z0v0nHTU2Ro9KbCYoqcLIyhqnD2V8
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2N2M4MjI4ZWY3NDcxODFiOTA0YWJmZWYiLCJlbWFpbCI6InZva3NoaW5AeWEucnUiLCJpYXQiOjE3NDE2NzY4ODcsImV4cCI6MTc0MTY4MDQ4N30.hKbTkOViTPaAnogmXmmyUGsZphK8CS08P43PnJfe7lY
 Content-Type: application/json
 
 {
@@ -327,7 +327,7 @@ Content-Type: application/json
 ###
 # Get my news feed
 GET http://localhost:4000/api/news-feed HTTP/1.1
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2N2M4MjI4ZWY3NDcxODFiOTA0YWJmZWYiLCJlbWFpbCI6InZva3NoaW5AeWEucnUiLCJpYXQiOjE3NDExOTM1NDIsImV4cCI6MTc0MTE5NzE0Mn0.fqrCD50DPPYOf2HbaOswkuVBVyYpe5iNV7T_cXSAPkM
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2N2M4MjI4ZWY3NDcxODFiOTA0YWJmZWYiLCJlbWFpbCI6InZva3NoaW5AeWEucnUiLCJpYXQiOjE3NDE2NzY4ODcsImV4cCI6MTc0MTY4MDQ4N30.hKbTkOViTPaAnogmXmmyUGsZphK8CS08P43PnJfe7lY
 Content-Type: application/json
 
 ###

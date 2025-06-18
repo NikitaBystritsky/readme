@@ -3,17 +3,18 @@ import 'multer';
 import FormData from 'form-data';
 
 import { HttpService } from '@nestjs/axios';
+import { ConfigType } from '@nestjs/config';
 import {
   Body,
   Controller,
   Get,
   HttpCode,
   HttpStatus,
+  Inject,
   Param,
   Patch,
   Post,
   Query,
-  Req,
   UploadedFile,
   UseFilters,
   UseInterceptors
@@ -21,12 +22,12 @@ import {
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiOperation, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 
+import { ApiGatewayAppConfig } from '@project/lib/config/api-gateway';
 import { ParseFormDataJsonPipe } from '@project/lib/core';
 import { CreateUserDTO, LoginUserDTO, UpdatePasswordDTO } from '@project/lib/shared/app/dto';
 import { File, Route, UploadCatalog } from '@project/lib/shared/app/types';
 
 import {
-  ApplicationServiceURL,
   SUCCESSFUL_AUTHORIZATION_RESPONSE,
   CREATE_USER_API_OPERATION,
   USER_CREATED_RESPONSE,
@@ -50,15 +51,17 @@ import {
   REFRESH_TOKEN_API_OPERATION,
   TOKEN_NOT_FOUND_ERROR,
   TOKEN_CREATE_ERROR
-} from './app.constant';
-import { AxiosExceptionFilter } from './filters/axios-exception.filter';
+} from './customers.constant';
+import { AxiosExceptionFilter } from '../filters/axios-exception.filter';
+import { RequestHeader } from '../decorators/request-header.decorator';
 
 @ApiTags(USER_TAG)
 @Controller(USER_ROUTE_PREFIX)
 @UseFilters(AxiosExceptionFilter)
 export class CustomersController {
   constructor(
-    private readonly httpService: HttpService
+    private readonly httpService: HttpService,
+    @Inject(ApiGatewayAppConfig.KEY) private readonly apiGatewayOptions: ConfigType<typeof ApiGatewayAppConfig>
   ) {}
 
   @ApiResponse({
@@ -92,17 +95,16 @@ export class CustomersController {
         filename: file.originalname,
         contentType: file.mimetype
       });
-      const result = await this.httpService.axiosRef.post(`${ApplicationServiceURL.Files}/upload`, formData, {
-        headers: {
-          ...formData.getHeaders()
-        }
-      });
+      const url = new URL('upload', this.apiGatewayOptions.filesServiceURL).toString();
+      const result = await this.httpService.axiosRef.post(url, formData,
+        { headers: formData.getHeaders() }
+      );
       image = result.data;
     }
-    const { data } = await this.httpService.axiosRef.post(`${ApplicationServiceURL.Users}/sign-up`, {
-      ...dto,
-      avatar: image?.hashName
-    });
+    const url = new URL('sign-up', this.apiGatewayOptions.usersServiceURL).toString();
+    const { data } = await this.httpService.axiosRef.post(url,
+      Object.assign(dto, { avatar: image?.hashName })
+    );
 
     return data;
   }
@@ -126,7 +128,8 @@ export class CustomersController {
   @HttpCode(HttpStatus.OK)
   @Post(Route.Authentication)
   public async login(@Body() dto: LoginUserDTO) {
-    const { data } = await this.httpService.axiosRef.post(`${ApplicationServiceURL.Users}/sign-in`, dto);
+    const url = new URL('sign-in', this.apiGatewayOptions.usersServiceURL).toString();
+    const { data } = await this.httpService.axiosRef.post(url, dto);
 
     return data;
   }
@@ -151,7 +154,8 @@ export class CustomersController {
   @HttpCode(HttpStatus.OK)
   @Get(Route.Root)
   public async getById(@Query('userId') userId: string) {
-    const { data } = await this.httpService.axiosRef.get(`${ApplicationServiceURL.Users}`, {
+    const url = new URL(this.apiGatewayOptions.usersServiceURL).toString();
+    const { data } = await this.httpService.axiosRef.get(url, {
       params: { userId }
     });
 
@@ -192,10 +196,11 @@ export class CustomersController {
   public async updatePassword(
     @Param('id') id: string,
     @Body() dto: UpdatePasswordDTO,
-    @Req() req: Request
+    @RequestHeader('authorization') authHeader: string
   ) {
-    const { data } = await this.httpService.axiosRef.patch(`${ApplicationServiceURL.Users}/${id}/update`, dto, {
-      headers: { 'Authorization': req.headers['authorization'] }
+    const url = new URL(`${id}/update`, this.apiGatewayOptions.usersServiceURL).toString();
+    const { data } = await this.httpService.axiosRef.patch(url, dto, {
+      headers: { 'Authorization': authHeader }
     });
 
     return data;
@@ -232,10 +237,11 @@ export class CustomersController {
   public async subscribe(
     @Param('id') id: string,
     @Query('userId') subscriptionId: string,
-    @Req() req: Request
+    @RequestHeader('authorization') authHeader: string
   ) {
-    await this.httpService.axiosRef.post(`${ApplicationServiceURL.Users}/${id}/subscribe`, null, {
-      headers: { 'Authorization': req.headers['authorization'] },
+    const url = new URL(`${id}/subscribe`, this.apiGatewayOptions.usersServiceURL).toString();
+    await this.httpService.axiosRef.post(url, null, {
+      headers: { 'Authorization': authHeader },
       params: { userId: subscriptionId }
     });
   }
@@ -258,9 +264,10 @@ export class CustomersController {
   })
   @HttpCode(HttpStatus.OK)
   @Post(Route.Refresh)
-  public async refreshToken(@Req() req: Request) {
-    const { data } = await this.httpService.axiosRef.post(`${ApplicationServiceURL.Users}/refresh`, null, {
-      headers: { 'Authorization': req.headers['authorization'] }
+  public async refreshToken(@RequestHeader('authorization') authHeader: string) {
+    const url = new URL('refresh', this.apiGatewayOptions.usersServiceURL).toString();
+    const { data } = await this.httpService.axiosRef.post(url, null, {
+      headers: { 'Authorization': authHeader }
     });
 
     return data;
