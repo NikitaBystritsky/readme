@@ -21,7 +21,7 @@ export class UserModel extends Document implements ExtendUser {
   @Prop({
     required: true
   })
-  password: string;
+  public password: string;
 
   @Prop({
     required: true
@@ -30,6 +30,9 @@ export class UserModel extends Document implements ExtendUser {
 
   @Prop()
   public avatar: string;
+
+  @Prop()
+  public subscriptions: string[];
 }
 
 export const UserSchema = SchemaFactory.createForClass(UserModel);

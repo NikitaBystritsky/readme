@@ -3,3 +3,4 @@ export * from './lib/mongoose.helpers';
 export * from './lib/rabbitmq.helpers';
 export * from './lib/mail.helpers';
 export * from './lib/app.helpers';
+export * from './lib/jwt.helpers';

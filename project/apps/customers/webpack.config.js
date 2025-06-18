@@ -1,9 +1,10 @@
+
 const { NxAppWebpackPlugin } = require('@nx/webpack/app-plugin');
 const { join } = require('path');
 
 module.exports = {
   output: {
-    path: join(__dirname, 'dist'),
+    path: join(__dirname, '../../dist/apps/customers'),
   },
   plugins: [
     new NxAppWebpackPlugin({
@@ -14,7 +15,7 @@ module.exports = {
       assets: ["./src/assets"],
       optimization: false,
       outputHashing: 'none',
-      generatePackageJson: true,
     })
   ],
 };
+

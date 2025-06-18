@@ -2,7 +2,7 @@ import { InternalServerErrorException } from '@nestjs/common';
 
 import { Entity } from '@project/lib/core';
 import { PostTags } from '@project/lib/shared/app/types';
-import { CreatePostTagDTO } from './dto/create-post-tags.dto';
+import { CreatePostTagDTO } from '@project/lib/shared/app/dto';
 import {
   LENGTH_VALIDATE,
   REGEXP,

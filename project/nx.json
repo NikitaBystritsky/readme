@@ -40,7 +40,7 @@
         "apps/notifications-e2e/**/*",
         "apps/news-feed-e2e/**/*",
         "apps/files-e2e/**/*",
-        "apps/api-e2e/**/*"
+        "apps/api-gateway-e2e/**/*"
       ]
     }
   ]

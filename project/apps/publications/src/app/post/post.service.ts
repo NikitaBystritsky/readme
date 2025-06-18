@@ -1,8 +1,12 @@
 import dayjs from 'dayjs';
 
-import { ConflictException, Injectable } from '@nestjs/common';
+import { BadRequestException, ConflictException, Injectable } from '@nestjs/common';
 
+import { CreatePostDTO, UpdatePostDTO } from '@project/lib/shared/app/dto';
+import { createMessage } from '@project/lib/shared/helpers';
 import { PostType } from '@project/lib/shared/app/types';
+import { PostQuery } from '@project/lib/shared/app/query';
+
 import { LinkPostService } from '../link-post/link-post.service';
 import { PostTagService } from '../post-tags/post-tags.service';
 import { VideoPostService } from '../video-post/video-post.service';
@@ -11,13 +15,9 @@ import { TextPostService } from '../text-post/text-post.service';
 import { QuotePostService } from '../quote-post/quote-post.service';
 import { PhotoPostService } from '../photo-post/photo-post.service';
 import { PostEntity } from './post.entity';
-import { CreatePostDTO } from './dto/create-post.dto';
-import { UpdatePostDTO } from './dto/update-post.dto';
 import { PostTagsEntity } from '../post-tags/post-tags.entity';
-import { createMessage } from '@project/lib/shared/helpers';
 import { NOT_FOUND_BY_ID_MESSAGE, REPOST_ERROR_MESSAGE } from './post.constant';
 import { PostContent } from './post.type';
-import { PostQuery } from './query/post.query';
 
 @Injectable()
 export class PostService {
@@ -62,7 +62,7 @@ export class PostService {
     const existsPost = await this.postRepository.findById(id);
 
     if(existsPost.repost) {
-      throw new Error(REPOST_ERROR_MESSAGE);
+      throw new BadRequestException(REPOST_ERROR_MESSAGE);
     }
 
     const post = {
@@ -77,6 +77,7 @@ export class PostService {
       originalPublicationId: existsPost.id
     }
     const newPost = new PostEntity(post);
+
     return this.postRepository.save(newPost);
   }
 
@@ -84,8 +85,8 @@ export class PostService {
     return this.postRepository.findById(id);
   }
 
-  public async getAllPosts(query?: PostQuery) {
-    return this.postRepository.find(query);
+  public async getAllPosts(query?: PostQuery, ids?: string[]) {
+    return this.postRepository.find(query, ids);
   }
 
   public async getPostsByDraftStatus(userId: string) {
@@ -95,7 +96,6 @@ export class PostService {
   public async updatePostById(id: string, dto: UpdatePostDTO) {
     const existsPost = await this.postRepository.findById(id);
     let isExistsPostUpdated = false;
-    let tags: PostTagsEntity;
 
     await this.postContent[existsPost.type].updatePostContent(existsPost[existsPost.type].id, dto);
 
@@ -106,9 +106,10 @@ export class PostService {
 
       if (key === 'tags') {
         if (!existsPost.tags) {
-          tags = await this.postTagsService.createTags({tags: dto.tags});
+          existsPost.tags = await this.postTagsService.createTags({ tags: dto.tags });
+          isExistsPostUpdated = true;
         } else {
-          tags = await this.postTagsService.updateTags(existsPost.tags.id, {tags: dto.tags});
+          existsPost.tags = await this.postTagsService.updateTags(existsPost.tags.id, { tags: dto.tags });
         }
 
         continue;
@@ -125,8 +126,6 @@ export class PostService {
     if (isExistsPostUpdated) {
       return this.postRepository.update(existsPost.id, existsPost);
     }
-
-    existsPost.tags.populate(tags.toObject());
 
     return existsPost;
   }
@@ -145,5 +144,9 @@ export class PostService {
 
   public async getLatestPosts(lastNotification?: Date) {
     return this.postRepository.findLatestPosts(lastNotification);
+  }
+
+  public async getUserPostsCount(id: string) {
+    return this.postRepository.getUserPostsCount(id);
   }
 }

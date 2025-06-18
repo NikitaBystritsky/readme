@@ -6,3 +6,4 @@ export * from './lib/repository/base-postgres.repository';
 export * from './lib/pipes/mongo-id-validation.pipe';
 export * from './lib/pipes/file-size-validation.pipe';
 export * from './lib/pipes/file-type-validation.pipe';
+export * from './lib/pipes/parse-form-data-json.pipe';

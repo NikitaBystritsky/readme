@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
 
-import { CreatePostTagDTO } from './dto/create-post-tags.dto';
-import { UpdatePostTagDTO } from './dto/update-post-tags.dto';
+import { CreatePostTagDTO, UpdatePostTagDTO } from '@project/lib/shared/app/dto';
 import { PostTagsEntity } from './post-tags.entity';
 import { PostTagsRepository } from './post-tags.repository';
 

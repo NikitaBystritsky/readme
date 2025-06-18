@@ -1,13 +1,11 @@
 import {
   Body,
   Controller,
-  DefaultValuePipe,
   Delete,
   Get,
   HttpCode,
   HttpStatus,
   Param,
-  ParseIntPipe,
   Post,
   Query
 } from '@nestjs/common';
@@ -15,19 +13,19 @@ import {
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
 
 import { fillDto } from '@project/lib/shared/helpers';
-import { CreateCommentDTO } from './dto/create-comment.dto';
-import { CommentRDO } from './rdo/comment.rdo';
+import { CreateCommentDTO } from '@project/lib/shared/app/dto';
+import { CommentsWithPaginationRDO, CreatedCommentRDO } from '@project/lib/shared/app/rdo';
 import { CommentService } from './comment.service';
 import {
   COMMENT_CREATED_RESPONSE,
   COMMENT_DELETE_RESPONSE,
   COMMENTS_FOUND_RESPONSE,
-  DEFAULT_MAX_COMMENT_COUNT,
   NOT_AUTHORIZED_RESPONSE,
-  Route,
   ROUTE_PREFIX,
   TAG
 } from './comment.constant';
+import { Route } from '@project/lib/shared/app/types';
+import { CommentsQuery } from '@project/lib/shared/app/query';
 
 @ApiTags(TAG)
 @Controller(ROUTE_PREFIX)
@@ -46,12 +44,12 @@ export class CommentController {
   })
   @Post(Route.Root)
   public async create(
-    @Body() dto: CreateCommentDTO,
-    @Param('postId') postId: string
+    @Param('postId') postId: string,
+    @Body() dto: CreateCommentDTO
   ) {
     const newComment = await this.commentService.createComment(postId, dto);
 
-    return fillDto(CommentRDO, newComment.toObject());
+    return fillDto(CreatedCommentRDO, newComment.toObject());
   }
 
   @ApiResponse({
@@ -61,11 +59,11 @@ export class CommentController {
   @Get(Route.Root)
   public async show(
     @Param('postId') postId: string,
-    @Query('count', new DefaultValuePipe(DEFAULT_MAX_COMMENT_COUNT), ParseIntPipe) count: number
+    @Query() query: CommentsQuery
   ) {
-    const comments = await this.commentService.getCommentsByPostId(postId, {count});
+    const comments = await this.commentService.getCommentsByPostId(postId, query);
 
-    return fillDto(CommentRDO, comments.map((comment) => comment.toObject()));
+    return fillDto(CommentsWithPaginationRDO, { ...comments, entities: comments.entities.map((post) => post.toObject()) }, { exposeDefaultValues: false });
   }
 
   @ApiResponse({
@@ -76,9 +74,9 @@ export class CommentController {
     status: HttpStatus.UNAUTHORIZED,
     description: NOT_AUTHORIZED_RESPONSE
   })
-  @Delete(Route.CommentParam)
-  @HttpCode(204)
-  public async destroy(@Param('id') id: string) {
-    await this.commentService.deleteCommentById(id, '66e87f4f646c29eff76565a8');
+  @Delete(Route.Param)
+  @HttpCode(HttpStatus.NO_CONTENT)
+  public async delete(@Param('id') id: string, @Query('userId') userId: string) {
+    await this.commentService.deleteCommentById(id, userId);
   }
 }

@@ -1,7 +1,7 @@
 import { Entity } from '@project/lib/core';
 
 import { Comment } from '@project/lib/shared/app/types';
-import { CreateCommentDTO } from './dto/create-comment.dto';
+import { CreateCommentDTO } from '@project/lib/shared/app/dto';
 
 
 export class CommentEntity implements Comment, Entity<string> {

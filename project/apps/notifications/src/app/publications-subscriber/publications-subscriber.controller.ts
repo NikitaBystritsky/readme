@@ -1,41 +1,49 @@
-import { Controller, Post, Query } from '@nestjs/common';
+import { Controller, HttpCode, HttpStatus, Post, Query } from '@nestjs/common';
+import { ApiResponse, ApiTags } from '@nestjs/swagger';
 
 import { RabbitSubscribe } from '@golevelup/nestjs-rabbitmq';
 
-import { Post as PostType, RabbitRouting } from '@project/lib/shared/app/types';
+import { Exchange, Queue, RabbitRouting, Route } from '@project/lib/shared/app/types';
+import { CreatePublicationsSubscriberDTO } from '@project/lib/shared/app/dto';
 
 import { PublicationsSubscriberService } from './publications-subscriber.service';
-import { CreatePublicationsSubscriberDTO } from './dto/create-publications-subscriber.dto';
 import { MailService } from '../mail/mail.service';
-import { CUSTOMERS_SUBSCRIBE, NOTIFICATIONS_SUBSCRIBE, ROUTE } from './publications-subscriber.constants';
+import {
+  NEWS_FEED_MESSAGE,
+  NOT_AUTHORIZED_RESPONSE,
+  NOTIFICATION_ROUTE_PREFIX,
+  NOTIFICATION_TAG
+} from './publications-subscriber.constants';
 
-@Controller()
+@ApiTags(NOTIFICATION_TAG)
+@Controller(NOTIFICATION_ROUTE_PREFIX)
 export class PublicationsSubscriberController {
   constructor(
     private readonly publicationsSubscriberService: PublicationsSubscriberService,
     private readonly mailService: MailService,
   ) {}
 
-  @Post(ROUTE)
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: NEWS_FEED_MESSAGE
+  })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    description: NOT_AUTHORIZED_RESPONSE
+  })
+  @HttpCode(HttpStatus.OK)
+  @Post(Route.Root)
   public async sendLastPublications(@Query('email') email: string) {
-    this.publicationsSubscriberService.getLastPublications({email});
+    const lastPosts = await this.publicationsSubscriberService.getLastPublications({ email });
+    this.mailService.sendNotifyNewPublication(email, lastPosts)
   }
 
   @RabbitSubscribe({
-    exchange: CUSTOMERS_SUBSCRIBE.EXCHANGE,
+    exchange: Exchange.CustomersExchange,
     routingKey: RabbitRouting.AddSubscriber,
-    queue: CUSTOMERS_SUBSCRIBE.QUEUE
+    queue: Queue.AddSubscriberQueue
   })
   public async addSubscriber(dto: CreatePublicationsSubscriberDTO) {
     await this.publicationsSubscriberService.saveSubscriber(dto);
-  }
-
-  @RabbitSubscribe({
-    exchange: NOTIFICATIONS_SUBSCRIBE.EXCHANGE,
-    routingKey: RabbitRouting.PublicationsReceived,
-    queue: NOTIFICATIONS_SUBSCRIBE.QUEUE
-  })
-  public async send(message: {email: string, posts: PostType[]}) {
-    this.mailService.sendNotifyNewPublication(message.email, message.posts)
   }
 }

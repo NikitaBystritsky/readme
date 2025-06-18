@@ -13,16 +13,15 @@ import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { FileFieldsInterceptor } from '@nestjs/platform-express';
 
 import { fillDto } from '@project/lib/shared/helpers';
-import { UploadCatalog } from '@project/lib/shared/app/types';
+import { Route, UploadCatalog } from '@project/lib/shared/app/types';
 import { FileSizeValidationPipe, FileTypeValidationPipe, MongoIdValidationPipe } from '@project/lib/core';
 
-import { FilesRDO } from './rdo/files.rdo';
+import { UploadedFileRDO } from '@project/lib/shared/app/rdo';
 import { FilesUploaderService } from './files-uploader.service';
 import {
   FILE_UPLOADED_RESPONSE,
   MAX_UPLOAD_FILES,
   NOT_FOUND_BY_ID_RESPONSE,
-  Route,
   ROUTE_PREFIX,
   TAG
 } from './files-uploader.constant';
@@ -45,17 +44,17 @@ export class FilesUploaderController {
   public async save(@UploadedFiles(FileSizeValidationPipe, FileTypeValidationPipe) file: UploadFile) {
     const recordedFile = await this.filesUploaderService.saveFile(file);
 
-    return fillDto(FilesRDO, recordedFile.toObject());
+    return fillDto(UploadedFileRDO, recordedFile.toObject());
   }
 
   @ApiResponse({
     status: HttpStatus.CONFLICT,
     description: NOT_FOUND_BY_ID_RESPONSE
   })
-  @Get(Route.FileParam)
+  @Get(Route.Param)
   public async show(@Param('id', MongoIdValidationPipe) id: string) {
     const existFile = await this.filesUploaderService.getFile(id);
 
-    return fillDto(FilesRDO, existFile.toObject());
+    return fillDto(UploadedFileRDO, existFile.toObject());
   }
 }

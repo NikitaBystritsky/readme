@@ -6,6 +6,7 @@ import { TextPost } from './text-post.interface';
 import { Timestamps } from './timestamps.interface';
 import { VideoPost } from './video-post.interface';
 import { PostStatus, PostType } from './post.enum';
+import { User } from './user.interface';
 
 export interface Post extends Timestamps {
   id?: string;
@@ -24,4 +25,5 @@ export interface Post extends Timestamps {
   tags?: PostTags;
   likeCount?: number;
   commentCount?: number;
+  user?: string | User;
 }

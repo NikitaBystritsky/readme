@@ -17,7 +17,6 @@ const rabbitWQSchema = Joi.object({
   password: Joi.string().required(),
   port: Joi.number().port().required(),
   user: Joi.string().required(),
-  queue: Joi.string().required(),
   exchange: Joi.string().required(),
   type: Joi.string().required()
 })
@@ -36,7 +35,6 @@ export function getRabbitMQConfig(): RabbitConfig {
     password: process.env.RABBITMQ_PASSWORD,
     port: parseInt(process.env.RABBITMQ_PORT, 10) || RABBITMQ_DEFAULT_PORT,
     user: process.env.RABBITMQ_USER,
-    queue: process.env.RABBITMQ_QUEUE,
     exchange: process.env.RABBITMQ_EXCHANGE,
     type: process.env.RABBITMQ_EXCHANGE_TYPE || TYPE_EXCHANGE
   }
