@@ -17,9 +17,16 @@
     "paths": {
       "@project/lib/config/customers": ["lib/config/customers/src/index.ts"],
       "@project/lib/config/files": ["lib/config/files/src/index.ts"],
-      "@project/lib/config/publications": ["lib/config/publications/src/index.ts"],
+      "@project/lib/config/notifications": [
+        "lib/config/notifications/src/index.ts"
+      ],
+      "@project/lib/config/publications": [
+        "lib/config/publications/src/index.ts"
+      ],
       "@project/lib/core": ["lib/core/src/index.ts"],
-      "@project/lib/publications/models": ["lib/publications/models/src/index.ts"],
+      "@project/lib/publications/models": [
+        "lib/publications/models/src/index.ts"
+      ],
       "@project/lib/shared/app/types": ["lib/shared/app/types/src/index.ts"],
       "@project/lib/shared/helpers": ["lib/shared/helpers/src/index.ts"],
       "@project/lib/swagger": ["lib/swagger/src/index.ts"]

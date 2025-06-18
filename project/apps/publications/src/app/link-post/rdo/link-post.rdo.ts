@@ -1,19 +1,19 @@
 import { ApiProperty } from '@nestjs/swagger';
 
 import { Expose } from 'class-transformer';
-import { DescriptionProperty, URLProperty } from '../link-post.constant';
+import { DESCRIPTION_PROPERTY, URL_PROPERTY } from '../link-post.constant';
 
 export class LinkPostRDO {
   @ApiProperty({
-    description: URLProperty.DESCRIPTION,
-    example: URLProperty.EXAMPLE
+    description: URL_PROPERTY.DESCRIPTION,
+    example: URL_PROPERTY.EXAMPLE
   })
   @Expose()
   public url: string;
 
   @ApiProperty({
-    description: DescriptionProperty.DESCRIPTION,
-    example: DescriptionProperty.EXAMPLE
+    description: DESCRIPTION_PROPERTY.DESCRIPTION,
+    example: DESCRIPTION_PROPERTY.EXAMPLE
   })
   @Expose()
   public description: string;

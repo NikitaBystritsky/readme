@@ -1,7 +1,7 @@
 import {
-  HttpException,
-  HttpStatus,
+  ConflictException,
   Injectable,
+  InternalServerErrorException,
   Logger,
   NotFoundException,
   UnauthorizedException
@@ -43,7 +43,7 @@ export class AuthService {
     const existUser = await this.userRepository.findByEmail(dto.email);
 
     if(existUser) {
-      throw new NotFoundException(createMessage(USER_EXISTS_MESSAGE, [dto.email]));
+      throw new ConflictException(createMessage(USER_EXISTS_MESSAGE, [dto.email]));
     }
     const userEntity = await new UserEntity(user).setPassword(dto.password);
 
@@ -77,10 +77,8 @@ export class AuthService {
 
   public async createToken(user: User): Promise<Token> {
     const payload: TokenPayload = {
+      id: user.id,
       email: user.email,
-      fullName: user.fullName,
-      avatar: user.avatar,
-      createdAt: user.createdAt
     }
 
     try {
@@ -88,7 +86,7 @@ export class AuthService {
       return {accessToken};
     } catch (error) {
       this.logger.error(createMessage(TOKEN_GENERATE_ERROR, [error.message]));
-      throw new HttpException(TOKEN_CREATION_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
+      throw new InternalServerErrorException(TOKEN_CREATION_ERROR);
     }
   }
 }

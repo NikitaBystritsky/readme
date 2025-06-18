@@ -142,4 +142,8 @@ export class PostService {
   public async searchPostByTittle(searchParams: string) {
     return this.postRepository.search(searchParams);
   }
+
+  public async getLatestPosts(lastNotification?: Date) {
+    return this.postRepository.findLatestPosts(lastNotification);
+  }
 }

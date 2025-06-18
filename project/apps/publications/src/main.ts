@@ -8,12 +8,14 @@ import { NestFactory } from '@nestjs/core';
 import { ConfigService } from '@nestjs/config';
 
 import { createSwagger } from '@project/lib/swagger';
+import { createMessage } from '@project/lib/shared/helpers';
 
 import { AppModule } from './app/app.module';
+import { APP_RUN_MESSAGE, PREFIX } from './constant';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  const globalPrefix = 'api';
+  const globalPrefix = PREFIX;
   const configService = app.get(ConfigService);
   const port = configService.get<string>('publicationsApp.port');
   const hostname = configService.get<string>('publicationsApp.host');
@@ -24,7 +26,7 @@ async function bootstrap() {
   }));
 
   await app.listen(port);
-  Logger.log(`🚀 Application is running on: http://${hostname}:${port}/${globalPrefix}`);
+  Logger.log(createMessage(APP_RUN_MESSAGE, [hostname, port, globalPrefix]));
 }
 
 bootstrap();

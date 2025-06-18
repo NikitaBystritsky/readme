@@ -2,77 +2,77 @@ import { ApiProperty } from '@nestjs/swagger';
 
 import { Expose } from 'class-transformer';
 import {
-  CatalogProperty,
-  CreatedAtProperty,
-  HashNameProperty,
-  IdProperty,
-  MimetypeProperty,
-  OriginalNameProperty,
-  PathNameProperty,
-  SizeProperty,
-  SubDirectoryProperty
+  CATALOG_PROPERTY,
+  CREATED_AT_PROPERTY,
+  HASH_NAME_PROPERTY,
+  ID_PROPERTY,
+  MIMETYPE_PROPERTY,
+  ORIGINAL_NAME_PROPERTY,
+  PATH_NAME_PROPERTY,
+  SIZE_PROPERTY,
+  SUB_DIRECTORY_PROPERTY
 } from '../files-uploader.constant';
 
 export class FilesRDO {
   @ApiProperty({
-    description: IdProperty.DESCRIPTION,
-    example: IdProperty.EXAMPLE
+    description: ID_PROPERTY.DESCRIPTION,
+    example: ID_PROPERTY.EXAMPLE
   })
   @Expose()
   public id: string;
 
   @ApiProperty({
-    description: OriginalNameProperty.DESCRIPTION,
-    example: OriginalNameProperty.EXAMPLE
+    description: ORIGINAL_NAME_PROPERTY.DESCRIPTION,
+    example: ORIGINAL_NAME_PROPERTY.EXAMPLE
   })
   @Expose()
   public originalName: string;
 
   @ApiProperty({
-    description: SubDirectoryProperty.DESCRIPTION,
-    example: SubDirectoryProperty.EXAMPLE
+    description: SUB_DIRECTORY_PROPERTY.DESCRIPTION,
+    example: SUB_DIRECTORY_PROPERTY.EXAMPLE
   })
   @Expose()
   public subDirectory: string;
 
   @ApiProperty({
-    description: CatalogProperty.DESCRIPTION,
-    example: CatalogProperty.EXAMPLE
+    description: CATALOG_PROPERTY.DESCRIPTION,
+    example: CATALOG_PROPERTY.EXAMPLE
   })
   @Expose()
   public catalog: string;
 
   @ApiProperty({
-    description: SizeProperty.DESCRIPTION,
-    example: SizeProperty.EXAMPLE
+    description: SIZE_PROPERTY.DESCRIPTION,
+    example: SIZE_PROPERTY.EXAMPLE
   })
   @Expose()
   public size: number;
 
   @ApiProperty({
-    description: MimetypeProperty.DESCRIPTION,
-    example: MimetypeProperty.EXAMPLE
+    description: MIMETYPE_PROPERTY.DESCRIPTION,
+    example: MIMETYPE_PROPERTY.EXAMPLE
   })
   @Expose()
   public mimetype: string;
 
   @ApiProperty({
-    description: HashNameProperty.DESCRIPTION,
-    example: HashNameProperty.EXAMPLE
+    description: HASH_NAME_PROPERTY.DESCRIPTION,
+    example: HASH_NAME_PROPERTY.EXAMPLE
   })
   @Expose()
   public hashName: string;
 
   @ApiProperty({
-    description: PathNameProperty.DESCRIPTION,
-    example: PathNameProperty.EXAMPLE
+    description: PATH_NAME_PROPERTY.DESCRIPTION,
+    example: PATH_NAME_PROPERTY.EXAMPLE
   })
   @Expose()
   public path: string;
 
   @ApiProperty({
-    description: CreatedAtProperty.DESCRIPTION,
-    example: CreatedAtProperty.EXAMPLE
+    description: CREATED_AT_PROPERTY.DESCRIPTION,
+    example: CREATED_AT_PROPERTY.EXAMPLE
   })
   @Expose()
   public createdAt: Date;

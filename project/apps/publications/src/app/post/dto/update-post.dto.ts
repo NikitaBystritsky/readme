@@ -4,83 +4,83 @@ import { IsEnum, IsISO8601, IsOptional } from 'class-validator';
 
 import { PostStatus } from '@project/lib/shared/app/types';
 import {
-  AuthorProperty,
-  ContentProperty,
+  AUTHOR_PROPERTY,
+  CONTENT_PROPERTY,
   DATE_TYPE_MESSAGE,
-  DescriptionProperty,
-  ImageProperty,
+  DESCRIPTION_PROPERTY,
+  IMAGE_PROPERTY,
   POST_STATUS_MESSAGE,
-  PreviewProperty,
-  PublishedDateProperty,
-  StatusProperty,
-  TagsProperty,
-  TitleProperty,
-  URLProperty
+  PREVIEW_PROPERTY,
+  PUBLISHED_DATE_PROPERTY,
+  STATUS_PROPERTY,
+  TAGS_PROPERTY,
+  TITLE_PROPERTY,
+  URL_PROPERTY
 } from '../post.constant';
 
 export class UpdatePostDTO {
   @ApiProperty({
     enum: PostStatus,
-    description: StatusProperty.DESCRIPTION,
-    example: StatusProperty.EXAMPLE
+    description: STATUS_PROPERTY.DESCRIPTION,
+    example: STATUS_PROPERTY.EXAMPLE
   })
   @IsEnum(PostStatus, {message: POST_STATUS_MESSAGE})
   @IsOptional()
   public status?: PostStatus;
 
   @ApiProperty({
-    description: PublishedDateProperty.DESCRIPTION,
-    example: PublishedDateProperty.EXAMPLE
+    description: PUBLISHED_DATE_PROPERTY.DESCRIPTION,
+    example: PUBLISHED_DATE_PROPERTY.EXAMPLE
   })
   @IsISO8601({}, {message: DATE_TYPE_MESSAGE})
   @IsOptional()
   public publishedDate?: Date;
 
   @ApiProperty({
-    description: URLProperty.DESCRIPTION,
-    example: URLProperty.EXAMPLE
+    description: URL_PROPERTY.DESCRIPTION,
+    example: URL_PROPERTY.EXAMPLE
   })
   public url?: string;
 
   @ApiProperty({
-    description: DescriptionProperty.DESCRIPTION,
-    example: DescriptionProperty.EXAMPLE
+    description: DESCRIPTION_PROPERTY.DESCRIPTION,
+    example: DESCRIPTION_PROPERTY.EXAMPLE
   })
   public description?: string;
 
   @ApiProperty({
-    description: ImageProperty.DESCRIPTION,
-    example: ImageProperty.EXAMPLE
+    description: IMAGE_PROPERTY.DESCRIPTION,
+    example: IMAGE_PROPERTY.EXAMPLE
   })
   public image?: string;
 
   @ApiProperty({
-    description: AuthorProperty.DESCRIPTION,
-    example: AuthorProperty.EXAMPLE
+    description: AUTHOR_PROPERTY.DESCRIPTION,
+    example: AUTHOR_PROPERTY.EXAMPLE
   })
   public author?: string;
 
   @ApiProperty({
-    description: ContentProperty.DESCRIPTION,
-    example: ContentProperty.EXAMPLE
+    description: CONTENT_PROPERTY.DESCRIPTION,
+    example: CONTENT_PROPERTY.EXAMPLE
   })
   public content?: string;
 
   @ApiProperty({
-    description: TitleProperty.DESCRIPTION,
-    example: TitleProperty.EXAMPLE
+    description: TITLE_PROPERTY.DESCRIPTION,
+    example: TITLE_PROPERTY.EXAMPLE
   })
   public title?: string;
 
   @ApiProperty({
-    description: PreviewProperty.DESCRIPTION,
-    example: PreviewProperty.EXAMPLE
+    description: PREVIEW_PROPERTY.DESCRIPTION,
+    example: PREVIEW_PROPERTY.EXAMPLE
   })
   public preview?: string;
 
   @ApiProperty({
-    description: TagsProperty.DESCRIPTION,
-    example: TagsProperty.EXAMPLE
+    description: TAGS_PROPERTY.DESCRIPTION,
+    example: TAGS_PROPERTY.EXAMPLE
   })
   public tags?: string[];
 }

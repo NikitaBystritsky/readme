@@ -7,26 +7,26 @@ import {
   REQUIRED_MESSAGE,
   TITLE_LENGTH_MESSAGE,
   TITLE_TYPE_MESSAGE,
-  TitleLength,
-  TitleProperty,
+  TITLE_LENGTH,
+  TITLE_PROPERTY,
   URL_MATCH_MESSAGE,
   URL_TYPE_MESSAGE,
-  URLProperty
+  URL_PROPERTY
 } from '../video-post.constant';
 
 export class CreateVideoPostDTO {
   @ApiProperty({
-    description: TitleProperty.DESCRIPTION,
-    example: TitleProperty.EXAMPLE
+    description: TITLE_PROPERTY.DESCRIPTION,
+    example: TITLE_PROPERTY.EXAMPLE
   })
   @IsString({message: TITLE_TYPE_MESSAGE})
   @IsNotEmpty({message: REQUIRED_MESSAGE})
-  @Length(TitleLength.MIN, TitleLength.MAX, {message: TITLE_LENGTH_MESSAGE})
+  @Length(TITLE_LENGTH.MIN, TITLE_LENGTH.MAX, {message: TITLE_LENGTH_MESSAGE})
   public title: string;
 
   @ApiProperty({
-    description: URLProperty.DESCRIPTION,
-    example: URLProperty.EXAMPLE
+    description: URL_PROPERTY.DESCRIPTION,
+    example: URL_PROPERTY.EXAMPLE
   })
   @IsUrl({}, {message: URL_TYPE_MESSAGE})
   @IsNotEmpty({message: REQUIRED_MESSAGE})

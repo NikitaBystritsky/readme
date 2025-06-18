@@ -2,12 +2,12 @@ import { ApiProperty } from '@nestjs/swagger';
 
 import { Expose } from 'class-transformer';
 
-import { TagsProperty } from '../post-tags.constant';
+import { TAGS_PROPERTY } from '../post-tags.constant';
 
 export class PostTagsRDO {
   @ApiProperty({
-    description: TagsProperty.DESCRIPTION,
-    example: TagsProperty.EXAMPLE
+    description: TAGS_PROPERTY.DESCRIPTION,
+    example: TAGS_PROPERTY.EXAMPLE
   })
   @Expose()
   public tags: string[];

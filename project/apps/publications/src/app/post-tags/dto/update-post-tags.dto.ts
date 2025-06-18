@@ -2,12 +2,12 @@ import { ApiProperty } from '@nestjs/swagger';
 
 import { IsArray, IsOptional, MaxLength } from 'class-validator';
 
-import { FIELD_TYPE_MESSAGE, MAX_TAGS, TAGS_LENGTH_MESSAGE, TagsProperty } from '../post-tags.constant';
+import { FIELD_TYPE_MESSAGE, MAX_TAGS, TAGS_LENGTH_MESSAGE, TAGS_PROPERTY } from '../post-tags.constant';
 
 export class UpdatePostTagDTO {
   @ApiProperty({
-    description: TagsProperty.DESCRIPTION,
-    example: TagsProperty.EXAMPLE
+    description: TAGS_PROPERTY.DESCRIPTION,
+    example: TAGS_PROPERTY.EXAMPLE
   })
   @IsArray({message: FIELD_TYPE_MESSAGE})
   @MaxLength(MAX_TAGS, {message: TAGS_LENGTH_MESSAGE})

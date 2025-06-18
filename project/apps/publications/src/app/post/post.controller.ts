@@ -12,12 +12,18 @@ import {
 } from '@nestjs/common';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
 
+import { AmqpConnection, RabbitSubscribe } from '@golevelup/nestjs-rabbitmq';
+
+import { RabbitRouting } from '@project/lib/shared/app/types';
+import { fillDto } from '@project/lib/shared/helpers';
+
 import { PostService } from './post.service';
 import { CreatePostDTO } from './dto/create-post.dto';
-import { fillDto } from '@project/lib/shared/helpers';
 import { PostRDO } from './rdo/post.rdo';
 import {
   NOT_AUTHORIZED_RESPONSE,
+  NOTIFICATIONS_SEND_RESPONSE,
+  NOTIFICATIONS_SUBSCRIBE,
   POST_CREATED_RESPONSE,
   POST_DELETE_RESPONSE,
   POST_FOUND_RESPONSE,
@@ -25,6 +31,7 @@ import {
   POST_REPOSTED_RESPONSE,
   POST_UPDATE_RESPONSE,
   POSTS_FOUND_RESPONSE,
+  PUBLICATIONS_SUBSCRIBE,
   Route,
   ROUTE_PREFIX,
   TAG,
@@ -33,12 +40,14 @@ import {
 import { UpdatePostDTO } from './dto/update-post.dto';
 import { PostQuery } from './query/post.query';
 import { PostWithPaginationRDO } from './rdo/post-with-pagination.rdo';
+import { GetPostDTO } from './dto/get-post.dto';
 
 @ApiTags(TAG)
 @Controller(ROUTE_PREFIX)
 export class PostController {
   constructor(
-    private readonly postService: PostService
+    private readonly postService: PostService,
+    private readonly rabbitClient: AmqpConnection
   ) {}
 
   @ApiResponse({
@@ -53,6 +62,7 @@ export class PostController {
     status: HttpStatus.UNAUTHORIZED,
     description: NOT_AUTHORIZED_RESPONSE
   })
+
   @Post(Route.Root)
   public async create(@Body() dto: CreatePostDTO) {
     const newPost = await this.postService.createPost({...dto, userId: '66e87f4f646c29eff76565a8'});
@@ -157,5 +167,27 @@ export class PostController {
     const posts = await this.postService.searchPostByTittle(title);
 
     return fillDto(PostRDO, posts.map((post) => post.toObject()), {exposeDefaultValues: false});
+  }
+
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: NOTIFICATIONS_SEND_RESPONSE
+  })
+  @RabbitSubscribe({
+    exchange: PUBLICATIONS_SUBSCRIBE.EXCHANGE,
+    routingKey: RabbitRouting.GetPublications,
+    queue: PUBLICATIONS_SUBSCRIBE.QUEUE
+  })
+  async getLatestPosts(message: GetPostDTO) {
+    const posts = await this.postService.getLatestPosts(message.lastNotification);
+
+    await this.rabbitClient.publish(
+      NOTIFICATIONS_SUBSCRIBE.EXCHANGE,
+      RabbitRouting.PublicationsReceived,
+      {
+        email: message.email,
+        posts: fillDto(PostRDO, posts.map((post) => post.toObject()), {exposeDefaultValues: false})
+      }
+    );
   }
 }

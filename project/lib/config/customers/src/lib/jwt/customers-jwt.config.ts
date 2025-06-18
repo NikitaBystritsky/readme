@@ -23,4 +23,4 @@ function getJwtConfig(): JWTConfig {
   return config;
 }
 
-export default registerAs('customersJwt', getJwtConfig);
+export const CustomersJwtConfig = registerAs('customersJwt', getJwtConfig);

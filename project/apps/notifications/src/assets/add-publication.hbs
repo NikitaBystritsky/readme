@@ -1,0 +1,14 @@
+<div>
+  {{#if posts}}
+  <h2>Available for viewing {{posts.length}} new posts.</h2>
+  <ul>
+    {{#each posts}}
+      <li>
+        <a href={{this.id}}>{{this.type}} post.</a>
+      </li>
+    {{/each}}
+  </ul>
+  {{else}}
+  <h2>There are no new posts.</h2>
+  {{/if}}
+</div>

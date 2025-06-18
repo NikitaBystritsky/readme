@@ -3,14 +3,14 @@ import { ApiProperty } from '@nestjs/swagger';
 import { IsOptional, IsString } from 'class-validator';
 
 import {
-  PhotoProperty,
+  PHOTO_PROPERTY,
   TYPE_MESSAGE
 } from '../photo-post.constant';
 
 export class UpdatePhotoPostDTO {
   @ApiProperty({
-    description: PhotoProperty.DESCRIPTION,
-    example: PhotoProperty.EXAMPLE
+    description: PHOTO_PROPERTY.DESCRIPTION,
+    example: PHOTO_PROPERTY.EXAMPLE
   })
   @IsString({message: TYPE_MESSAGE})
   @IsOptional()

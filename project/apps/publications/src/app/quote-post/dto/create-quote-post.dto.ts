@@ -4,31 +4,31 @@ import { IsNotEmpty, IsString, Length } from 'class-validator';
 
 import {
   AUTHOR_LENGTH_MESSAGE,
-  AuthorLength,
-  AuthorProperty,
+  AUTHOR_LENGTH,
+  AUTHOR_PROPERTY,
   CONTENT_LENGTH_MESSAGE,
-  ContentLength,
-  ContentProperty,
+  CONTENT_LENGTH,
+  CONTENT_PROPERTY,
   REQUIRED_MESSAGE,
   TYPE_MESSAGE
 } from '../quote-post.constant';
 
 export class CreateQuotePostDTO {
   @ApiProperty({
-    description: AuthorProperty.DESCRIPTION,
-    example: AuthorProperty.EXAMPLE
+    description: AUTHOR_PROPERTY.DESCRIPTION,
+    example: AUTHOR_PROPERTY.EXAMPLE
   })
   @IsString({message: TYPE_MESSAGE})
   @IsNotEmpty({message: REQUIRED_MESSAGE})
-  @Length(AuthorLength.MIN, AuthorLength.MAX, {message: AUTHOR_LENGTH_MESSAGE})
+  @Length(AUTHOR_LENGTH.MIN, AUTHOR_LENGTH.MAX, {message: AUTHOR_LENGTH_MESSAGE})
   public author: string;
 
   @ApiProperty({
-    description: ContentProperty.DESCRIPTION,
-    example: ContentProperty.EXAMPLE
+    description: CONTENT_PROPERTY.DESCRIPTION,
+    example: CONTENT_PROPERTY.EXAMPLE
   })
   @IsString({message: TYPE_MESSAGE})
   @IsNotEmpty({message: REQUIRED_MESSAGE})
-  @Length(ContentLength.MIN, ContentLength.MAX, {message: CONTENT_LENGTH_MESSAGE})
+  @Length(CONTENT_LENGTH.MIN, CONTENT_LENGTH.MAX, {message: CONTENT_LENGTH_MESSAGE})
   public content: string;
 }

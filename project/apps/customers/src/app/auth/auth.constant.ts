@@ -21,62 +21,62 @@ export const REQUIRED_MESSAGE = 'The field should not be empty.';
 export const ROUTE_PREFIX = 'user';
 export const TAG = 'User';
 
-export const FullNameProperty = {
+export const FULL_NAME_PROPERTY = {
   DESCRIPTION: 'Last name and first name of the user.',
   EXAMPLE: 'Глуханько Антон'
 }
 
-export const EmailProperty = {
+export const EMAIL_PROPERTY = {
   DESCRIPTION: 'The user unique email address.',
   EXAMPLE: 'user@mail.ru'
 }
 
-export const PasswordProperty = {
+export const PASSWORD_PROPERTY = {
   DESCRIPTION: 'The user password.',
   EXAMPLE: '123456'
 }
 
-export const OldPasswordProperty = {
+export const OLD_PASSWORD_PROPERTY = {
   DESCRIPTION: 'The user old password.',
   EXAMPLE: '123456'
 }
 
-export const AvatarProperty = {
+export const AVATAR_PROPERTY = {
   DESCRIPTION: 'The user avatar path.',
   EXAMPLE: 'upload/default-avatar.png'
 }
 
-export const IdProperty = {
+export const ID_PROPERTY = {
   DESCRIPTION: 'A unique user ID.',
   EXAMPLE: '667c673deb3171fbdaa4ce26'
 }
 
-export const AccessProperty = {
+export const ACCESS_PROPERTY = {
   DESCRIPTION: 'The user access token.',
   EXAMPLE: 'T2VyLm5lckBnbWFpbC5jb20'
 }
 
-export const CreatedAtProperty = {
+export const CREATED_AT_PROPERTY = {
   DESCRIPTION: 'The created date.',
   EXAMPLE: '2022-01-18T17:36:34.064Z'
 }
 
-export const PostCountProperty = {
+export const POST_COUNT_PROPERTY = {
   DESCRIPTION: 'Number of user posts.',
   EXAMPLE: '5'
 }
 
-export const SubscribeCountProperty = {
+export const SUBSCRIBE_COUNT_PROPERTY = {
   DESCRIPTION: 'Number of subscribers.',
   EXAMPLE: '1'
 }
 
-export const PasswordLength = {
+export const PASSWORD_LENGTH = {
   MIN: 6,
   MAX: 12
 }
 
-export const FullNameLength = {
+export const FULL_NAME_LENGTH = {
   MIN: 3,
   MAX: 50
 }

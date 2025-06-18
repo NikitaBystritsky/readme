@@ -16,6 +16,7 @@ export const POST_DELETE_RESPONSE = 'The publication was successfully deleted.';
 export const POST_NOT_FOUND_RESPONSE = 'The publication with this id not found.'
 export const VALIDATION_RESPONSE = 'Validation error.';
 export const NOT_AUTHORIZED_RESPONSE = 'The user is not logged in.';
+export const NOTIFICATIONS_SEND_RESPONSE = 'Notifications sent successfully';
 
 export const USER_ID_TYPE_MESSAGE = 'The Id must be of the MongoId type.';
 export const REQUIRED_MESSAGE = 'The field should not be empty.';
@@ -26,62 +27,72 @@ export const POST_TYPE_MESSAGE = 'The field must be one of the types: "link", "p
 export const ROUTE_PREFIX = 'posts';
 export const TAG = 'Publications';
 
-export const TypeProperty = {
+export const PUBLICATIONS_SUBSCRIBE = {
+  EXCHANGE: 'readme.publications',
+  QUEUE: 'publications.queue'
+}
+
+export const NOTIFICATIONS_SUBSCRIBE = {
+  EXCHANGE: 'readme.notifications',
+  QUEUE: 'notifications.queue'
+}
+
+export const TYPE_PROPERTY = {
   DESCRIPTION: 'The type of blog post is one of five types: video, text, quote, photo, link.',
   EXAMPLE: 'video'
 }
 
-export const StatusProperty = {
+export const STATUS_PROPERTY = {
   DESCRIPTION: 'The publication status is one of two states: published or draft.',
   EXAMPLE: 'published'
 }
 
-export const UserIdProperty = {
+export const USER_ID_PROPERTY = {
   DESCRIPTION: 'A unique user ID.',
   EXAMPLE: '667c673deb3171fbdaa4ce26'
 }
 
-export const URLProperty = {
+export const URL_PROPERTY = {
   DESCRIPTION: 'Valid URL.',
   EXAMPLE: 'https://nestjs.com/'
 }
 
-export const DescriptionProperty = {
+export const DESCRIPTION_PROPERTY = {
   DESCRIPTION: 'Description of the content.',
   EXAMPLE: 'A progressive framework for creating efficient, reliable and scalable server applications.'
 }
 
-export const ImageProperty = {
+export const IMAGE_PROPERTY = {
   DESCRIPTION: 'Image in jpg or png format.',
   EXAMPLE: 'upload/cat.jpg'
 }
 
-export const AuthorProperty = {
+export const AUTHOR_PROPERTY = {
   DESCRIPTION: 'The author of the quote.',
   EXAMPLE: 'Fyodor Dostoevsky'
 }
 
-export const ContentProperty = {
+export const CONTENT_PROPERTY = {
   DESCRIPTION: 'The contents of the publication.',
   EXAMPLE: 'One must love life more than the very meaning of life!'
 }
 
-export const TitleProperty = {
+export const TITLE_PROPERTY = {
   DESCRIPTION: 'Title of the publication',
   EXAMPLE: 'Artificial intelligence still deprives people of work.'
 }
 
-export const PreviewProperty = {
+export const PREVIEW_PROPERTY = {
   DESCRIPTION: 'Announcement of the publication.',
   EXAMPLE: 'The scientific journal has used AI to create scientific articles.'
 }
 
-export const TagsProperty = {
+export const TAGS_PROPERTY = {
   DESCRIPTION: 'List of publication tags.',
   EXAMPLE: '#city#japan#sunrise#tokio'
 }
 
-export const PublishedDateProperty = {
+export const PUBLISHED_DATE_PROPERTY = {
   DESCRIPTION: 'The publication publication date.',
   EXAMPLE: '2022-01-18T17:36:34.064Z'
 }
@@ -91,10 +102,11 @@ export enum Route {
   PostParam = ':id',
   Draft = 'draft',
   Repost = ':id/repost',
-  Search = 'search'
+  Search = 'search',
+  Newsletter = 'newsletter'
 }
 
-export const CommentLength = {
+export const COMMENT_LENGTH = {
   MIN: 10,
   MAX: 300
 }

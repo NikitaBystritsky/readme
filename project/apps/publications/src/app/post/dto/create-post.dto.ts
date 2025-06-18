@@ -4,28 +4,28 @@ import { IsEnum, IsMongoId, IsNotEmpty } from 'class-validator';
 
 import { PostStatus, PostType } from '@project/lib/shared/app/types';
 import {
-  AuthorProperty,
-  ContentProperty,
-  DescriptionProperty,
-  ImageProperty,
+  AUTHOR_PROPERTY,
+  CONTENT_PROPERTY,
+  DESCRIPTION_PROPERTY,
+  IMAGE_PROPERTY,
   POST_STATUS_MESSAGE,
   POST_TYPE_MESSAGE,
-  PreviewProperty,
+  PREVIEW_PROPERTY,
   REQUIRED_MESSAGE,
-  StatusProperty,
-  TagsProperty,
-  TitleProperty,
-  TypeProperty,
-  URLProperty,
+  STATUS_PROPERTY,
+  TAGS_PROPERTY,
+  TITLE_PROPERTY,
+  TYPE_PROPERTY,
+  URL_PROPERTY,
   USER_ID_TYPE_MESSAGE,
-  UserIdProperty
+  USER_ID_PROPERTY
 } from '../post.constant';
 
 export class CreatePostDTO {
   @ApiProperty({
     enum: PostType,
-    description: TypeProperty.DESCRIPTION,
-    example: TypeProperty.EXAMPLE
+    description: TYPE_PROPERTY.DESCRIPTION,
+    example: TYPE_PROPERTY.EXAMPLE
   })
   @IsEnum(PostType, {message: POST_TYPE_MESSAGE})
   @IsNotEmpty({message: REQUIRED_MESSAGE})
@@ -33,66 +33,66 @@ export class CreatePostDTO {
 
   @ApiProperty({
     enum: PostStatus,
-    description: StatusProperty.DESCRIPTION,
-    example: StatusProperty.EXAMPLE
+    description: STATUS_PROPERTY.DESCRIPTION,
+    example: STATUS_PROPERTY.EXAMPLE
   })
   @IsEnum(PostStatus, {message: POST_STATUS_MESSAGE})
   @IsNotEmpty({message: REQUIRED_MESSAGE})
   public status: PostStatus;
 
   @ApiProperty({
-    description: UserIdProperty.DESCRIPTION,
-    example: UserIdProperty.EXAMPLE
+    description: USER_ID_PROPERTY.DESCRIPTION,
+    example: USER_ID_PROPERTY.EXAMPLE
   })
   @IsMongoId({message: USER_ID_TYPE_MESSAGE})
   @IsNotEmpty({message: REQUIRED_MESSAGE})
   public userId: string;
 
   @ApiProperty({
-    description: URLProperty.DESCRIPTION,
-    example: URLProperty.EXAMPLE
+    description: URL_PROPERTY.DESCRIPTION,
+    example: URL_PROPERTY.EXAMPLE
   })
   public url: string;
 
   @ApiProperty({
-    description: DescriptionProperty.DESCRIPTION,
-    example: DescriptionProperty.EXAMPLE
+    description: DESCRIPTION_PROPERTY.DESCRIPTION,
+    example: DESCRIPTION_PROPERTY.EXAMPLE
   })
   public description: string;
 
   @ApiProperty({
-    description: ImageProperty.DESCRIPTION,
-    example: ImageProperty.EXAMPLE
+    description: IMAGE_PROPERTY.DESCRIPTION,
+    example: IMAGE_PROPERTY.EXAMPLE
   })
   public image: string;
 
   @ApiProperty({
-    description: AuthorProperty.DESCRIPTION,
-    example: AuthorProperty.EXAMPLE
+    description: AUTHOR_PROPERTY.DESCRIPTION,
+    example: AUTHOR_PROPERTY.EXAMPLE
   })
   public author: string;
 
   @ApiProperty({
-    description: ContentProperty.DESCRIPTION,
-    example: ContentProperty.EXAMPLE
+    description: CONTENT_PROPERTY.DESCRIPTION,
+    example: CONTENT_PROPERTY.EXAMPLE
   })
   public content: string;
 
   @ApiProperty({
-    description: TitleProperty.DESCRIPTION,
-    example: TitleProperty.EXAMPLE
+    description: TITLE_PROPERTY.DESCRIPTION,
+    example: TITLE_PROPERTY.EXAMPLE
   })
   public title: string;
 
   @ApiProperty({
-    description: PreviewProperty.DESCRIPTION,
-    example: PreviewProperty.EXAMPLE
+    description: PREVIEW_PROPERTY.DESCRIPTION,
+    example: PREVIEW_PROPERTY.EXAMPLE
   })
   public preview: string;
 
   @ApiProperty({
-    description: TagsProperty.DESCRIPTION,
-    example: TagsProperty.EXAMPLE
+    description: TAGS_PROPERTY.DESCRIPTION,
+    example: TAGS_PROPERTY.EXAMPLE
   })
   public tags?: string[];
 }
