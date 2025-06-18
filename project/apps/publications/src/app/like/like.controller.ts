@@ -1,16 +1,15 @@
-import { Body, Controller, HttpStatus, Param, Post } from '@nestjs/common';
+import { Controller, HttpStatus, Param, Post } from '@nestjs/common';
 
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
 
 import { LikeService } from './like.service';
-import { LikeDTO } from './dto/like.dto';
 import {
   LIKE_STATUS_UPDATE_RESPONSE,
   NOT_AUTHORIZED_RESPONSE,
-  Route,
   ROUTE_PREFIX,
   TAG
 } from './like.constant';
+import { Route } from '@project/lib/shared/app/types';
 
 @ApiTags(TAG)
 @Controller(ROUTE_PREFIX)
@@ -27,11 +26,11 @@ export class LikeController {
     status: HttpStatus.UNAUTHORIZED,
     description: NOT_AUTHORIZED_RESPONSE
   })
-  @Post(Route.Root)
+  @Post(Route.Param)
   public async toggle(
-    @Body() dto: LikeDTO,
+    @Param('id') userId: string,
     @Param('postId') postId: string
   ) {
-    await this.likeService.togglePostLike(postId, dto);
+    await this.likeService.togglePostLike(postId, userId);
   }
 }

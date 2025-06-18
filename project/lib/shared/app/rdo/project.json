@@ -1,0 +1,9 @@
+{
+  "name": "lib-shared-app-rdo",
+  "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "lib/shared/app/rdo/src",
+  "projectType": "library",
+  "tags": [],
+  "// targets": "to see all targets run: nx show project lib-shared-app-rdo --web",
+  "targets": {}
+}

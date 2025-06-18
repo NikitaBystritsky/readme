@@ -1,9 +1,8 @@
 import { Injectable } from '@nestjs/common';
 
-import { CreateQuotePostDTO } from './dto/create-quote-post.dto';
+import { CreateQuotePostDTO, UpdateQuotePostDTO } from '@project/lib/shared/app/dto';
 import { QuotePostEntity } from './quote-post.entity';
 import { QuotePostRepository } from './quote-post.repository';
-import { UpdateQuotePostDTO } from './dto/update-quote-post.dto';
 
 @Injectable()
 export class QuotePostService {

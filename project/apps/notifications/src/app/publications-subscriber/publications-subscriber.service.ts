@@ -4,13 +4,12 @@ import {Injectable} from '@nestjs/common';
 
 import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
 
-import { RabbitRouting } from '@project/lib/shared/app/types';
+import { Exchange, Post, RabbitRouting } from '@project/lib/shared/app/types';
 
 import { PublicationsSubscriberEntity } from './publications-subscriber.entity';
 import { PublicationsSubscriberRepository } from './publications-subscriber.repository';
-import { CreatePublicationsSubscriberDTO } from './dto/create-publications-subscriber.dto';
-import { PUBLICATIONS_SUBSCRIBE } from './publications-subscriber.constants';
-import { SendLastPublicationsDTO } from './dto/send-last-publications.dto';
+import { CreatePublicationsSubscriberDTO, SendLastPostsDTO } from '@project/lib/shared/app/dto';
+import { REQUEST_TIMEOUT } from './publications-subscriber.constants';
 
 @Injectable()
 export class PublicationsSubscriberService {
@@ -31,14 +30,15 @@ export class PublicationsSubscriberService {
       .save(new PublicationsSubscriberEntity(dto));
   }
 
-  public async getLastPublications(dto: SendLastPublicationsDTO) {
+  public async getLastPublications(dto: SendLastPostsDTO) {
     const subscriber = await this.publicationsSubscriberRepository.findEmail(dto.email);
 
-    await this.rabbitClient.publish(
-      PUBLICATIONS_SUBSCRIBE.EXCHANGE,
-      RabbitRouting.GetPublications,
-      {email: dto.email, lastNotification: subscriber.lastNotification}
-    );
+    const lastPosts = this.rabbitClient.request<Post[]>({
+      exchange: Exchange.NotificationsExchange,
+      routingKey: RabbitRouting.GetPublications,
+      payload: { lastNotification: subscriber.lastNotification },
+      timeout: REQUEST_TIMEOUT
+    });
 
     const entity = new PublicationsSubscriberEntity({
       email: dto.email,
@@ -49,6 +49,8 @@ export class PublicationsSubscriberService {
       subscriber.id,
       entity
     );
+
+    return lastPosts;
   }
 }
 

@@ -124,7 +124,7 @@ model Tag {
 
 model Like {
   id            String      @id @default(uuid())
-  publication   Publication @relation(fields: [publicationId], references: [id])
+  publication   Publication @relation(fields: [publicationId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   publicationId String      @map("publication_id") @db.Char(36)
   userId        String      @map("user_id") @db.Char(24)
   createdAt     DateTime    @default(now()) @map("created_at")
@@ -137,7 +137,7 @@ model Comment {
   content       String      @db.VarChar(300)
   createdAt     DateTime    @default(now()) @map("created_at")
   updatedAt     DateTime    @updatedAt @map("updated_at")
-  publication   Publication @relation(fields: [publicationId], references: [id])
+  publication   Publication @relation(fields: [publicationId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   publicationId String      @map("publication_id") @db.Char(36)
   userId        String      @map("user_id") @db.Char(24)
 

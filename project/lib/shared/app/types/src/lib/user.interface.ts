@@ -5,4 +5,5 @@ export interface User extends Timestamps {
   email: string;
   fullName: string;
   avatar?: string;
+  subscriptions: string[];
 }

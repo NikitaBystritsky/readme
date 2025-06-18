@@ -1,9 +1,8 @@
 import { Injectable } from '@nestjs/common';
 
-import { CreateLinkPostDTO } from './dto/create-link-post.dto';
+import { CreateLinkPostDTO, UpdateLinkPostDTO } from '@project/lib/shared/app/dto';
 import { LinkPostEntity } from './link-post.entity';
 import { LinkPostRepository } from './link-post.repository';
-import { UpdateLinkPostDTO } from './dto/update-link-post.dto';
 
 @Injectable()
 export class LinkPostService {

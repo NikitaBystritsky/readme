@@ -1,0 +1,333 @@
+# Create user with avatar.
+
+POST http://localhost:4000/api/users/sign-up HTTP/1.1
+Content-Type: multipart/form-data; boundary=MyBoundary
+
+--MyBoundary
+Content-Disposition: form-data; name="avatar"; filename="avatar.jpg"
+Content-Type: image/jpeg
+
+< C:\Users\strim\Desktop\pro\avatar.jpg
+--MyBoundary
+Content-Disposition: form-data; name="data"
+
+{
+  "fullName": "Матвеева Галина",
+  "email": "emma.dementev@mail.ru",
+  "password": "123456"
+}
+--MyBoundary--
+
+# Create user without avatar.
+###
+
+POST http://localhost:4000/api/users/sign-up HTTP/1.1
+Content-Type: multipart/form-data; boundary=MyBoundary
+
+--MyBoundary
+Content-Disposition: form-data; name="data"
+
+{
+  "fullName": "Глуханько Антон",
+  "email": "user@mail.ru",
+  "password": "123456"
+}
+--MyBoundary--
+
+###
+# Login user.
+
+POST http://localhost:4000/api/users/sign-in HTTP/1.1
+Content-Type: application/json
+
+{
+  "email": "vokshin@ya.ru",
+  "password": "123456"
+}
+
+###
+# Get user information for a specific user by user ID.
+
+GET http://localhost:4000/api/users?userId=67c8223ef747181b904abfe9 HTTP/1.1
+Content-Type: application/json
+
+###
+# Update password.
+
+PATCH http://localhost:4000/api/users/67c8224cf747181b904abfec/update HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2N2M4MjI4ZWY3NDcxODFiOTA0YWJmZWYiLCJlbWFpbCI6InZva3NoaW5AeWEucnUiLCJpYXQiOjE3NDExOTc0NDcsImV4cCI6MTc0MTIwMTA0N30.gkMmJWfKsoGJk0jlp3O5_jg_qas_5vf74p5ozC4yF3o
+Content-Type: application/json
+
+{
+  "password": "111111",
+  "oldPassword": "123456"
+}
+
+###
+# Subscribe or unsubscribe to a user by ID.
+
+POST http://localhost:4000/api/users/67c8228ef747181b904abfef/subscribe?userId=67c8224cf747181b904abfec HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2N2M4MjI0Y2Y3NDcxODFiOTA0YWJmZWMiLCJlbWFpbCI6InVzZXJAbWFpbC5ydSIsImlhdCI6MTc0MTE2OTM4NywiZXhwIjoxNzQxMTcyOTg3fQ.eDtvUfrBBVEYScUvWDAH7AREB1xyEUTfSQtz02h2QC8
+Content-Type: application/json
+
+###
+# Refresh token.
+
+POST http://localhost:4000/api/users/refresh HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2N2M4MjI0Y2Y3NDcxODFiOTA0YWJmZWMiLCJlbWFpbCI6InVzZXJAbWFpbC5ydSIsInRva2VuSWQiOiIzY2FmZDBkNy0wYWUzLTRkZTYtODQyNC05OWQ4YzRhNmNmODciLCJpYXQiOjE3NDExNjkzMjAsImV4cCI6MTc0MTc3NDEyMH0.gOSI9f_YgGd0By7bji_lQ0aocpS4PlbTXLibp4AfknQ
+Content-Type: application/json
+
+###
+# Create "Video"" publication.
+
+POST http://localhost:4000/api/publications/create HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2N2M4MjI4ZWY3NDcxODFiOTA0YWJmZWYiLCJlbWFpbCI6InZva3NoaW5AeWEucnUiLCJpYXQiOjE3NDExODk3ODUsImV4cCI6MTc0MTE5MzM4NX0.KLgO-yaK8bxbMZMCiJjPDgzGCfwL-9p4o9hhJYvlROE
+Content-Type: application/json
+
+{
+  "type": "video",
+  "status": "published",
+  "url": "https://www.youtube.com/watch?v=xBInF48M0F0",
+  "title": "Burabai Kazakhstan",
+  "tags": ["походвгоры", "заповедник", "вода", "горы", "облака", "бурабай"]
+}
+
+###
+# Create "Quote"" publication.
+
+POST http://localhost:4000/api/publications/create HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2N2M4MjI4ZWY3NDcxODFiOTA0YWJmZWYiLCJlbWFpbCI6InZva3NoaW5AeWEucnUiLCJpYXQiOjE3NDExNzA2NDMsImV4cCI6MTc0MTE3NDI0M30.BRJb2FrnkBePL1jE5WmVKrMZj7NUu9jmUtQ92VIY-M0
+Content-Type: application/json
+
+{
+  "type": "quote",
+  "status": "published",
+  "author": "Альберт Эйнштейн",
+  "content": "Жизнь похожа на езду на велосипеде. Чтобы сохранить равновесие, ты должен продолжать двигаться"
+}
+
+###
+# Create "Photo" publication.
+
+POST http://localhost:4000/api/publications/create HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2N2M4MjI4ZWY3NDcxODFiOTA0YWJmZWYiLCJlbWFpbCI6InZva3NoaW5AeWEucnUiLCJpYXQiOjE3NDExODYzMzcsImV4cCI6MTc0MTE4OTkzN30.H9B8QCc_IEJRyOfZDR8_c67hajsWSIajkfMPSc-H8d4
+Content-Type: multipart/form-data; boundary=MyBoundary
+
+--MyBoundary
+Content-Disposition: form-data; name="photo"; filename="mountain.png"
+Content-Type: image/png
+
+< C:\Users\strim\Desktop\pro\mountain.png
+--MyBoundary
+Content-Disposition: form-data; name="data"
+
+{
+  "type": "photo",
+  "status": "published",
+  "tags": ["Tokio", "sky"]
+}
+--MyBoundary--
+
+###
+# Create "Link" publication.
+
+POST http://localhost:4000/api/publications/create HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2N2M4MjI4ZWY3NDcxODFiOTA0YWJmZWYiLCJlbWFpbCI6InZva3NoaW5AeWEucnUiLCJpYXQiOjE3NDExNzA2NDMsImV4cCI6MTc0MTE3NDI0M30.BRJb2FrnkBePL1jE5WmVKrMZj7NUu9jmUtQ92VIY-M0
+Content-Type: application/json
+
+{
+  "type": "link",
+  "status": "published",
+  "url": "https://www.postgresql.org/",
+  "description": "Самая совершенная в мире реляционная база данных с открытым исходным кодом"
+}
+
+###
+# Create a draft of a "Video" type publication.
+
+POST http://localhost:4000/api/publications/create HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2N2M4MjI4ZWY3NDcxODFiOTA0YWJmZWYiLCJlbWFpbCI6InZva3NoaW5AeWEucnUiLCJpYXQiOjE3NDExNzA2NDMsImV4cCI6MTc0MTE3NDI0M30.BRJb2FrnkBePL1jE5WmVKrMZj7NUu9jmUtQ92VIY-M0
+Content-Type: application/json
+
+{
+  "type": "video",
+  "status": "draft",
+  "url": "https://www.youtube.com/watch?v=6Nlfqu_63Mk",
+  "title": "Восход солнца в Токио",
+  "tags": ["город", "восход", "Япония", "Токио"]
+}
+
+###
+# Create a draft of a "Quote" type publication.
+
+POST http://localhost:4000/api/publications/create HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2N2M4MjI4ZWY3NDcxODFiOTA0YWJmZWYiLCJlbWFpbCI6InZva3NoaW5AeWEucnUiLCJpYXQiOjE3NDExNzA2NDMsImV4cCI6MTc0MTE3NDI0M30.BRJb2FrnkBePL1jE5WmVKrMZj7NUu9jmUtQ92VIY-M0
+Content-Type: application/json
+
+{
+  "type": "quote",
+  "status": "draft",
+  "author": "Альберт Эйнштейн",
+  "content": "Чем умнее человек, тем легче он признает себя дураком."
+}
+
+###
+# Update publication.
+
+PATCH  http://localhost:4000/api/publications/455e812a-e70e-4cc3-9012-d1cf7eece9a8/update HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2N2M4MjI4ZWY3NDcxODFiOTA0YWJmZWYiLCJlbWFpbCI6InZva3NoaW5AeWEucnUiLCJpYXQiOjE3NDExODk3ODUsImV4cCI6MTc0MTE5MzM4NX0.KLgO-yaK8bxbMZMCiJjPDgzGCfwL-9p4o9hhJYvlROE
+Content-Type: application/json
+
+{
+  "status": "published",
+  "tags": ["Эйнштейн"]
+}
+
+###
+# Get publication by ID.
+
+GET http://localhost:4000/api/publications/455e812a-e70e-4cc3-9012-d1cf7eece9a8 HTTP/1.1
+Content-Type: application/json
+
+###
+# Get publications.
+
+GET http://localhost:4000/api/publications HTTP/1.1
+Content-Type: application/json
+
+###
+# Get 5 publications in ascending order sorted by date.
+
+GET http://localhost:4000/api/publications?count=5&orderDate=asc  HTTP/1.1
+Content-Type: application/json
+
+###
+# Get publications sorted by the presence of the "горы" tag.
+
+GET http://localhost:4000/api/publications?tag=горы  HTTP/1.1
+Content-Type: application/json
+
+###
+# Get publications sorted in ascending order of likes.
+
+GET http://localhost:4000/api/publications?orderLikes=asc  HTTP/1.1
+Content-Type: application/json
+
+###
+# Get publications sorted in ascending order of rating.
+
+GET http://localhost:4000/api/publications?orderRating=asc  HTTP/1.1
+Content-Type: application/json
+
+###
+# Get publications from a specific user.
+
+GET http://localhost:4000/api/publications?user=67c8224cf747181b904abfec HTTP/1.1
+Content-Type: application/json
+
+###
+# Get publications from post type.
+
+GET http://localhost:4000/api/publications?postType=video HTTP/1.1
+Content-Type: application/json
+
+###
+# Get the second page.
+
+GET http://localhost:4000/api/publications?page=2  HTTP/1.1
+Content-Type: application/json
+
+###
+# Get drafts.
+
+GET http://localhost:4000/api/publications/draft  HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2N2M4MjI4ZWY3NDcxODFiOTA0YWJmZWYiLCJlbWFpbCI6InZva3NoaW5AeWEucnUiLCJpYXQiOjE3NDExODk3ODUsImV4cCI6MTc0MTE5MzM4NX0.KLgO-yaK8bxbMZMCiJjPDgzGCfwL-9p4o9hhJYvlROE
+Content-Type: application/json
+
+###
+# A repost of a publication.
+
+POST http://localhost:4000/api/publications/455e812a-e70e-4cc3-9012-d1cf7eece9a8/repost  HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2N2M4MjI4ZWY3NDcxODFiOTA0YWJmZWYiLCJlbWFpbCI6InZva3NoaW5AeWEucnUiLCJpYXQiOjE3NDExODk3ODUsImV4cCI6MTc0MTE5MzM4NX0.KLgO-yaK8bxbMZMCiJjPDgzGCfwL-9p4o9hhJYvlROE
+Content-Type: application/json
+
+###
+# Delete the publication by ID.
+
+DELETE http://localhost:4000/api/publications/5ec9343c-ee5e-47fa-8dd2-64504ceccf37  HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2N2M4MjI4ZWY3NDcxODFiOTA0YWJmZWYiLCJlbWFpbCI6InZva3NoaW5AeWEucnUiLCJpYXQiOjE3NDExNzQ3MzEsImV4cCI6MTc0MTE3ODMzMX0.qq9KCFwuYpqS1wmbpZawo-O0_6nrUb1s9VXOJa-Iz4I
+
+###
+# Search publications by title name
+
+POST http://localhost:4000/api/publications/search?title=bur HTTP/1.1
+Content-Type: application/json
+
+###
+# Create comment for publication.
+
+POST http://localhost:4000/api/publications/5ec9343c-ee5e-47fa-8dd2-64504ceccf37/comments HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2N2M4MjI4ZWY3NDcxODFiOTA0YWJmZWYiLCJlbWFpbCI6InZva3NoaW5AeWEucnUiLCJpYXQiOjE3NDExNzMxMjEsImV4cCI6MTc0MTE3NjcyMX0.975GH8wWwv8j48Z0v0nHTU2Ro9KbCYoqcLIyhqnD2V8
+Content-Type: application/json
+
+{
+  "content": "ИИ, который обучили на старых журналах, наверняка будет выдавать устаревшие сведения."
+}
+
+###
+# Create comment for publication.
+
+POST http://localhost:4000/api/publications/5ec9343c-ee5e-47fa-8dd2-64504ceccf37/comments HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2N2M4MjI4ZWY3NDcxODFiOTA0YWJmZWYiLCJlbWFpbCI6InZva3NoaW5AeWEucnUiLCJpYXQiOjE3NDExNzMxMjEsImV4cCI6MTc0MTE3NjcyMX0.975GH8wWwv8j48Z0v0nHTU2Ro9KbCYoqcLIyhqnD2V8
+Content-Type: application/json
+
+{
+  "content": "Грядет восстание маши)."
+}
+
+###
+# Get comments.
+
+GET  http://localhost:4000/api/publications/5ec9343c-ee5e-47fa-8dd2-64504ceccf37/comments HTTP/1.1
+Content-Type: application/json
+
+###
+# Get 2 comment.
+
+GET  http://localhost:4000/api/publications/5ec9343c-ee5e-47fa-8dd2-64504ceccf37/comments?count=2 HTTP/1.1
+Content-Type: application/json
+
+###
+# Get the second page.
+
+GET http://localhost:4000/api/publications/5ec9343c-ee5e-47fa-8dd2-64504ceccf37/comments?page=2  HTTP/1.1
+Content-Type: application/json
+
+###
+# Delete comment with comment ID.
+
+DELETE   http://localhost:4000/api/publications/5ec9343c-ee5e-47fa-8dd2-64504ceccf37/comments/1adeb5ba-77f7-4b26-8536-600c5fc1081c HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2N2M4MjI4ZWY3NDcxODFiOTA0YWJmZWYiLCJlbWFpbCI6InZva3NoaW5AeWEucnUiLCJpYXQiOjE3NDExNzMxMjEsImV4cCI6MTc0MTE3NjcyMX0.975GH8wWwv8j48Z0v0nHTU2Ro9KbCYoqcLIyhqnD2V8
+Content-Type: application/json
+
+###
+# Mark like a publication or cancel an early like.
+
+POST http://localhost:4000/api/publications/5ec9343c-ee5e-47fa-8dd2-64504ceccf37/like/67c8224cf747181b904abfec HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2N2M4MjI4ZWY3NDcxODFiOTA0YWJmZWYiLCJlbWFpbCI6InZva3NoaW5AeWEucnUiLCJpYXQiOjE3NDExNzMxMjEsImV4cCI6MTc0MTE3NjcyMX0.975GH8wWwv8j48Z0v0nHTU2Ro9KbCYoqcLIyhqnD2V8
+Content-Type: application/json
+
+###
+# Send the last publication to the subscribed user.
+
+POST http://localhost:4000/api/notifications?email=emma.dementev@mail.ru HTTP/1.1
+Content-Type: application/json
+
+###
+# Get my news feed
+GET http://localhost:4000/api/news-feed HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2N2M4MjI4ZWY3NDcxODFiOTA0YWJmZWYiLCJlbWFpbCI6InZva3NoaW5AeWEucnUiLCJpYXQiOjE3NDExOTM1NDIsImV4cCI6MTc0MTE5NzE0Mn0.fqrCD50DPPYOf2HbaOswkuVBVyYpe5iNV7T_cXSAPkM
+Content-Type: application/json
+
+###

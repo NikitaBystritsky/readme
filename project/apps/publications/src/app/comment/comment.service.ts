@@ -4,9 +4,10 @@ import { createMessage } from '@project/lib/shared/helpers';
 
 import { NOT_FOUND_BY_ID_MESSAGE } from './comment.constant';
 import { CommentRepository } from './comment.repository';
-import { CreateCommentDTO } from './dto/create-comment.dto';
+import { CreateCommentDTO } from '@project/lib/shared/app/dto';
 import { CommentEntity } from './comment.entity';
 import { PostService } from '../post/post.service';
+import { CommentsQuery } from '@project/lib/shared/app/query';
 
 @Injectable()
 export class CommentService {
@@ -19,8 +20,8 @@ export class CommentService {
     return this.commentRepository.findById(commentId);
   }
 
-  public async getCommentsByPostId(postId: string, {count}) {
-    return this.commentRepository.findByPostId(postId, {count});
+  public async getCommentsByPostId(postId: string, query: CommentsQuery) {
+    return this.commentRepository.findByPostId(postId, query);
   }
 
   public async createComment(postId: string, dto: CreateCommentDTO) {

@@ -13,8 +13,9 @@ export class UserEntity implements ExtendUser, Entity<string> {
   public password: string;
   public createdAt?: Date;
   public avatar: string;
+  public subscriptions: string[];
+  public subscribersCount: number;
   public postCount: number;
-  public subscribeCount: number;
 
   constructor(user: ExtendUser) {
     this.populate(user);
@@ -27,7 +28,10 @@ export class UserEntity implements ExtendUser, Entity<string> {
       email: this.email,
       password: this.password,
       avatar: this.avatar,
-      createdAt: this.createdAt
+      createdAt: this.createdAt,
+      subscriptions: this.subscriptions,
+      subscribersCount: this.subscribersCount,
+      postCount: this.postCount
     }
   }
 
@@ -42,6 +46,7 @@ export class UserEntity implements ExtendUser, Entity<string> {
     this.password = user.password;
     this.avatar = user.avatar || DEFAULT_AVATAR;
     this.createdAt = user.createdAt;
+    this.subscriptions = user.subscriptions;
   }
 
   public async setPassword(password: string) {

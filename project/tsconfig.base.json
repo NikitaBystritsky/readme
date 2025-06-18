@@ -15,6 +15,9 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
+      "@project/lib/config/api-gateway": [
+        "lib/config/api-gateway/src/index.ts"
+      ],
       "@project/lib/config/customers": ["lib/config/customers/src/index.ts"],
       "@project/lib/config/files": ["lib/config/files/src/index.ts"],
       "@project/lib/config/notifications": [
@@ -27,6 +30,9 @@
       "@project/lib/publications/models": [
         "lib/publications/models/src/index.ts"
       ],
+      "@project/lib/shared/app/dto": ["lib/shared/app/dto/src/index.ts"],
+      "@project/lib/shared/app/query": ["lib/shared/app/query/src/index.ts"],
+      "@project/lib/shared/app/rdo": ["lib/shared/app/rdo/src/index.ts"],
       "@project/lib/shared/app/types": ["lib/shared/app/types/src/index.ts"],
       "@project/lib/shared/helpers": ["lib/shared/helpers/src/index.ts"],
       "@project/lib/swagger": ["lib/swagger/src/index.ts"]

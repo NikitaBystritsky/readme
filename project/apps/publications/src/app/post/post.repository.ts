@@ -6,10 +6,10 @@ import { BasePostgresRepository } from '@project/lib/core';
 import { PrismaClientService } from '@project/lib/publications/models';
 import { createMessage } from '@project/lib/shared/helpers';
 import { Pagination, Post } from '@project/lib/shared/app/types';
+import { PostQuery } from '@project/lib/shared/app/query';
 
 import { PostEntity } from './post.entity';
 import { MAX_POST_COUNT_SEARCH, NOT_FOUND_BY_ID_MESSAGE } from './post.constant';
-import { PostQuery } from './query/post.query';
 
 @Injectable()
 export class PostRepository extends BasePostgresRepository<PostEntity, Post> {
@@ -20,14 +20,14 @@ export class PostRepository extends BasePostgresRepository<PostEntity, Post> {
   }
 
   private async getPostCount(where: Prisma.PublicationWhereInput): Promise<number> {
-    return this.prismaClient.publication.count({where});
+    return this.prismaClient.publication.count({ where });
   }
 
   private calculatePostsPage(totalCount: number, limit: number): number {
     return Math.ceil(totalCount / limit);
   }
 
-  public async find(query: PostQuery): Promise<Pagination<PostEntity>> {
+  public async find(query: PostQuery, ids?: string[]): Promise<Pagination<PostEntity>> {
     const skip = query?.page && query?.count ?
       (query.page - 1) * query.count :
       Prisma.skip;
@@ -48,18 +48,15 @@ export class PostRepository extends BasePostgresRepository<PostEntity, Post> {
       }
     ];
     const where: Prisma.PublicationWhereInput = {
-      userId: query?.orderUser ?? Prisma.skip,
-      type: query?.orderType ?? Prisma.skip,
+      userId: ids ? { in: ids } : query?.user ?? Prisma.skip,
+      type: query?.postType ?? Prisma.skip,
       status: PostStatus.published,
-      tags: query?.orderTag ? {
+      tags: query?.tag ? {
         tags: {
-          hasEvery: [query.orderTag]
+          hasEvery: [query.tag]
         }
       } :
-      Prisma.skip,
-      createdAt: {
-        gt: query?.orderDateCreate ?? Prisma.skip
-      }
+      Prisma.skip
     };
 
     const [records, postCount] = await Promise.all([
@@ -180,7 +177,7 @@ export class PostRepository extends BasePostgresRepository<PostEntity, Post> {
       data: {
         status: entity.status,
         publishedDate: entity.publishedDate,
-        tags: !entity.tags ? {
+        tags: entity.tags ? {
           connect: {id: entity.tags.id}
         } :
         Prisma.skip
@@ -269,5 +266,9 @@ export class PostRepository extends BasePostgresRepository<PostEntity, Post> {
     })
 
     return records.map((record) => this.createEntityFromDocument(structuredClone(record)))
+  }
+
+  public async getUserPostsCount(userId: string) {
+    return this.getPostCount({ userId });
   }
 }
