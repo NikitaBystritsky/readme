@@ -8,12 +8,12 @@ export const LENGTH_VALIDATE = 'The tag must be at least 3 and no more than 10 c
 export const REGEXP = /^\p{L}$/u;
 export const MAX_TAGS = 8;
 
-export const TagLength = {
+export const TAG_LENGTH = {
   MIN: 3,
   MAX: 10
 };
 
-export const TagsProperty = {
+export const TAGS_PROPERTY = {
   DESCRIPTION: 'List of publication tags.',
   EXAMPLE: '#city#japan#sunrise#tokio'
 }

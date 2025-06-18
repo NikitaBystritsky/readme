@@ -2,11 +2,11 @@ import { registerAs } from '@nestjs/config';
 
 import { createMessage } from '@project/lib/shared/helpers';
 
-import { FilesAppConfig } from './files-app-config.interface';
+import { AppConfig } from './files-app-config.interface';
 import { DEFAULT_HOSTNAME, DEFAULT_PORT, VALIDATE_ERROR_MESSAGE } from './files-app.constant';
 import { filesAppValidationSchema } from './files-app-validation.schema';
 
-function validationAppConfig(config: FilesAppConfig): void {
+function validationAppConfig(config: AppConfig): void {
   const { error } = filesAppValidationSchema.validate(config, { abortEarly: true });
 
   if (error) {
@@ -14,8 +14,8 @@ function validationAppConfig(config: FilesAppConfig): void {
   }
 }
 
-function getAppConfig(): FilesAppConfig {
-  const config: FilesAppConfig = {
+function getAppConfig(): AppConfig {
+  const config: AppConfig = {
     environment: process.env.NODE_ENV,
     port: parseInt(process.env.PORT, 10) || DEFAULT_PORT,
     host: process.env.HOST || DEFAULT_HOSTNAME,
@@ -26,4 +26,4 @@ function getAppConfig(): FilesAppConfig {
   return config;
 }
 
-export default registerAs('filesApp', getAppConfig);
+export const FilesAppConfig = registerAs('filesApp', getAppConfig);

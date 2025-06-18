@@ -2,19 +2,19 @@ import { ApiProperty } from '@nestjs/swagger';
 
 import { Expose } from 'class-transformer';
 
-import { TitleProperty, URLProperty } from '../video-post.constant';
+import { TITLE_PROPERTY, URL_PROPERTY } from '../video-post.constant';
 
 export class VideoPostRDO {
   @ApiProperty({
-    description: TitleProperty.DESCRIPTION,
-    example: TitleProperty.EXAMPLE
+    description: TITLE_PROPERTY.DESCRIPTION,
+    example: TITLE_PROPERTY.EXAMPLE
   })
   @Expose()
   public title: string;
 
   @ApiProperty({
-    description: URLProperty.DESCRIPTION,
-    example: URLProperty.EXAMPLE
+    description: URL_PROPERTY.DESCRIPTION,
+    example: URL_PROPERTY.EXAMPLE
   })
   @Expose()
   public url: string;

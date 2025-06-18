@@ -1,2 +1,3 @@
 export * from './lib/config-publications.module';
-export { default as appConfig } from './lib/app/publications-app.config';
+export * from './lib/app/publications-app.config';
+export * from './lib/rabbit/publications-rabbit.config';

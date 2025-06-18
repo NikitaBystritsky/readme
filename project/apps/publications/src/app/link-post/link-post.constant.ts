@@ -6,12 +6,12 @@ export const DESCRIPTION_LENGTH_MESSAGE = 'The length should be no more than 300
 export const DESCRIPTION_TYPE_MESSAGE = 'The field must be a string.';
 export const REQUIRED_MESSAGE = 'The field should not be empty.';
 
-export const URLProperty = {
+export const URL_PROPERTY = {
   DESCRIPTION: 'Valid URL.',
   EXAMPLE: 'https://nestjs.com/'
 }
 
-export const DescriptionProperty = {
+export const DESCRIPTION_PROPERTY = {
   DESCRIPTION: 'Description of the link.',
   EXAMPLE: 'A progressive framework for creating efficient, reliable and scalable server applications.'
 }

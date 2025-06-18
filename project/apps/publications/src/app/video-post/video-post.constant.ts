@@ -7,17 +7,17 @@ export const URL_MATCH_MESSAGE = 'The link to the video must be on the YouTube s
 export const REG_EXP = /^(?:https?:\/\/)?(?:www\.)?(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))((\w|-){11})(?:\S+)?$/
 
 
-export const TitleProperty = {
+export const TITLE_PROPERTY = {
   DESCRIPTION: 'Title of the publication',
   EXAMPLE: 'Burabai Kazakhstan'
 }
 
-export const URLProperty = {
+export const URL_PROPERTY = {
   DESCRIPTION: 'A valid link to a video page on the YouTube service.',
   EXAMPLE: 'https://www.youtube.com/watch?v=xBInF48M0F0'
 }
 
-export const TitleLength = {
+export const TITLE_LENGTH = {
   MIN: 20,
   MAX: 50
 }

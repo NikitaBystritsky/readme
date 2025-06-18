@@ -5,22 +5,22 @@ export const CONTENT_LENGTH_MESSAGE = 'The length should be from 20 to 300 chara
 export const AUTHOR_LENGTH_MESSAGE = 'The length should be from 3 to 30 characters.';
 export const REQUIRED_MESSAGE = 'The field should not be empty.';
 
-export const AuthorProperty = {
+export const AUTHOR_PROPERTY = {
   DESCRIPTION: 'The author of the quote.',
   EXAMPLE: 'Fyodor Dostoevsky'
 }
 
-export const ContentProperty = {
+export const CONTENT_PROPERTY = {
   DESCRIPTION: 'The contents of the quote publication.',
   EXAMPLE: 'One must love life more than the very meaning of life!'
 }
 
-export const AuthorLength = {
+export const AUTHOR_LENGTH = {
   MIN: 3,
   MAX: 50
 }
 
-export const ContentLength = {
+export const CONTENT_LENGTH = {
   MIN: 20,
   MAX: 300
 }

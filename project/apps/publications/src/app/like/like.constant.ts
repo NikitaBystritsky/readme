@@ -8,7 +8,7 @@ export const REQUIRED_MESSAGE = 'The field should not be empty.';
 export const ROUTE_PREFIX = 'posts/:postId/like';
 export const TAG = 'Likes';
 
-export const UserIdProperty = {
+export const USER_ID_PROPERTY = {
   DESCRIPTION: 'A unique user ID.',
   EXAMPLE: '667c673deb3171fbdaa4ce26'
 }

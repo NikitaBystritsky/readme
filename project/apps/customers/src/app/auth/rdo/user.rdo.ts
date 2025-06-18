@@ -3,61 +3,61 @@ import { ApiProperty } from '@nestjs/swagger';
 import { Expose } from 'class-transformer';
 
 import {
-  AvatarProperty,
-  CreatedAtProperty,
-  EmailProperty,
-  FullNameProperty,
-  IdProperty,
-  PostCountProperty,
-  SubscribeCountProperty
+  AVATAR_PROPERTY,
+  CREATED_AT_PROPERTY,
+  EMAIL_PROPERTY,
+  FULL_NAME_PROPERTY,
+  ID_PROPERTY,
+  POST_COUNT_PROPERTY,
+  SUBSCRIBE_COUNT_PROPERTY
 } from '../auth.constant';
 
 export class UserRDO {
   @ApiProperty({
-    description: IdProperty.DESCRIPTION,
-    example: IdProperty.EXAMPLE
+    description: ID_PROPERTY.DESCRIPTION,
+    example: ID_PROPERTY.EXAMPLE
   })
   @Expose()
   public id: string;
 
   @ApiProperty({
-    description: FullNameProperty.DESCRIPTION,
-    example: FullNameProperty.EXAMPLE
+    description: FULL_NAME_PROPERTY.DESCRIPTION,
+    example: FULL_NAME_PROPERTY.EXAMPLE
   })
   @Expose()
   public fullName: string;
 
   @ApiProperty({
-    description: EmailProperty.DESCRIPTION,
-    example: EmailProperty.EXAMPLE
+    description: EMAIL_PROPERTY.DESCRIPTION,
+    example: EMAIL_PROPERTY.EXAMPLE
   })
   @Expose()
   public email: string
 
   @ApiProperty({
-    description: AvatarProperty.DESCRIPTION,
-    example: AvatarProperty.EXAMPLE
+    description: AVATAR_PROPERTY.DESCRIPTION,
+    example: AVATAR_PROPERTY.EXAMPLE
   })
   @Expose()
   public avatar: string;
 
   @ApiProperty({
-    description: CreatedAtProperty.DESCRIPTION,
-    example: CreatedAtProperty.EXAMPLE
+    description: CREATED_AT_PROPERTY.DESCRIPTION,
+    example: CREATED_AT_PROPERTY.EXAMPLE
   })
   @Expose()
   public createdAt: string;
 
   @ApiProperty({
-    description: PostCountProperty.DESCRIPTION,
-    example: PostCountProperty.EXAMPLE
+    description: POST_COUNT_PROPERTY.DESCRIPTION,
+    example: POST_COUNT_PROPERTY.EXAMPLE
   })
   @Expose()
   public postCount: number;
 
   @ApiProperty({
-    description: SubscribeCountProperty.DESCRIPTION,
-    example: SubscribeCountProperty.EXAMPLE
+    description: SUBSCRIBE_COUNT_PROPERTY.DESCRIPTION,
+    example: SUBSCRIBE_COUNT_PROPERTY.EXAMPLE
   })
   @Expose()
   public subscribeCount: number;

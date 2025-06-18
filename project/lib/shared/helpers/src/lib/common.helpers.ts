@@ -1,6 +1,6 @@
 import { ClassTransformOptions, plainToInstance } from 'class-transformer';
 
-const REGEX = /%([^%]*)%/;
+import { REGEX } from './helpers.constant';
 
 export function fillDto<T, P>(dto: new () => T, plainObject: P, options?: ClassTransformOptions): T;
 
@@ -21,3 +21,11 @@ export function createMessage<T>(message: string, expressions: T[] = []): string
 export function getMongoConnectionString({host, port, database, username, userPassword, authSource}): string {
   return `mongodb://${username}:${userPassword}@${host}:${port}/${database}?authSource=${authSource}`;
 }
+
+export function getRabbitMQConnectionString({user, password, host, port}): string {
+  return `amqp://${user}:${password}@${host}:${port}`;
+}
+
+export function parseBoolean(value: string | undefined): boolean {
+  return value === 'true';
+};

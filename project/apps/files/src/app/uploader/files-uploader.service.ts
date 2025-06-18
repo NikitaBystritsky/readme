@@ -13,7 +13,7 @@ import { ensureDir } from 'fs-extra';
 
 import { extension } from 'mime-types';
 
-import { filesAppConfig } from '@project/lib/config/files';
+import { FilesAppConfig } from '@project/lib/config/files';
 import { createMessage } from '@project/lib/shared/helpers';
 import { StoredFile, UploadCatalog } from '@project/lib/shared/app/types';
 
@@ -27,8 +27,8 @@ export class FilesUploaderService {
   private readonly logger = new Logger(FilesUploaderService.name);
 
   constructor(
-    @Inject(filesAppConfig.KEY)
-    public readonly config: ConfigType<typeof filesAppConfig>,
+    @Inject(FilesAppConfig.KEY)
+    public readonly config: ConfigType<typeof FilesAppConfig>,
     public readonly filesUploaderRepository: FilesUploaderRepository
   ) {}
 

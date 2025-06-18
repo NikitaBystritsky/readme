@@ -1,12 +1,12 @@
 import { ApiProperty } from '@nestjs/swagger';
 
 import { Expose } from 'class-transformer';
-import { PhotoProperty } from '../photo-post.constant';
+import { PHOTO_PROPERTY } from '../photo-post.constant';
 
 export class PhotoPostRDO {
   @ApiProperty({
-    description: PhotoProperty.DESCRIPTION,
-    example: PhotoProperty.EXAMPLE
+    description: PHOTO_PROPERTY.DESCRIPTION,
+    example: PHOTO_PROPERTY.EXAMPLE
   })
   @Expose()
   public image: string;

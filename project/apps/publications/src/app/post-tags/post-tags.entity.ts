@@ -7,7 +7,7 @@ import {
   LENGTH_VALIDATE,
   REGEXP,
   START_WITH_LETTER_VALIDATE,
-  TagLength
+  TAG_LENGTH
 } from './post-tags.constant';
 
 export class PostTagsEntity implements PostTags, Entity<string, PostTags> {
@@ -46,7 +46,7 @@ export class PostTagsEntity implements PostTags, Entity<string, PostTags> {
         throw new InternalServerErrorException(START_WITH_LETTER_VALIDATE);
       }
 
-      if (tag.length < TagLength.MIN || tag.length > TagLength.MAX) {
+      if (tag.length < TAG_LENGTH.MIN || tag.length > TAG_LENGTH.MAX) {
         throw new InternalServerErrorException(LENGTH_VALIDATE);
       }
     });

@@ -56,7 +56,10 @@ export class PostRepository extends BasePostgresRepository<PostEntity, Post> {
           hasEvery: [query.orderTag]
         }
       } :
-      Prisma.skip
+      Prisma.skip,
+      createdAt: {
+        gt: query?.orderDateCreate ?? Prisma.skip
+      }
     };
 
     const [records, postCount] = await Promise.all([
@@ -247,5 +250,24 @@ export class PostRepository extends BasePostgresRepository<PostEntity, Post> {
     return records.map((record) => this.createEntityFromDocument(Object.assign({
       tags: record.tags
     }, record)));
+  }
+
+  public async findLatestPosts(lastNotification?: Date): Promise<PostEntity[]> {
+    const records = await this.prismaClient.publication.findMany({
+      where: {
+        createdAt: {
+          gt: lastNotification ?? Prisma.skip
+        }
+      },
+      include: {
+        link: true,
+        photo: true,
+        quote: true,
+        text: true,
+        video: true
+      }
+    })
+
+    return records.map((record) => this.createEntityFromDocument(structuredClone(record)))
   }
 }

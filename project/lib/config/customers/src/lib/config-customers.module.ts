@@ -3,16 +3,22 @@ import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 
 import { ENV_FILE_PATH } from './customers.constant';
-import customersAppConfig from './app/customers-app.config';
-import customersMongoConfig from './mongo/customers-mongo.config';
-import customersJwtConfig from './jwt/customers-jwt.config';
+import { CustomersAppConfig } from './app/customers-app.config';
+import { CustomersMongoConfig } from './mongo/customers-mongo.config';
+import { CustomersJwtConfig } from './jwt/customers-jwt.config';
+import { CustomersRabbitConfig } from './rabbit/customers-rabbit.config';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
       cache: true,
-      load: [customersAppConfig, customersMongoConfig, customersJwtConfig],
+      load: [
+        CustomersAppConfig,
+        CustomersMongoConfig,
+        CustomersJwtConfig,
+        CustomersRabbitConfig
+      ],
       envFilePath: ENV_FILE_PATH
     })
   ],

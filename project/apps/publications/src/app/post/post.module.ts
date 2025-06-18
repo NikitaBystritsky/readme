@@ -1,5 +1,8 @@
 import { Module } from '@nestjs/common';
 
+import { RabbitMQModule } from '@golevelup/nestjs-rabbitmq';
+
+import { getRabbitMQOptions } from '@project/lib/shared/helpers';
 import { PrismaClientModule } from '@project/lib/publications/models';
 
 import { PostRepository } from './post.repository';
@@ -20,7 +23,11 @@ import { PostTagsModule } from '../post-tags/post-tags.module';
     QuotePostModule,
     PhotoPostModule,
     LinkPostModule,
-    PostTagsModule
+    PostTagsModule,
+    RabbitMQModule.forRootAsync(
+      RabbitMQModule,
+      getRabbitMQOptions('publicationsRabbit')
+    )
   ],
   controllers: [PostController],
   providers: [PostRepository, PostService],

@@ -1,26 +1,26 @@
 import { ApiProperty } from '@nestjs/swagger';
 
 import { Expose } from 'class-transformer';
-import { ContentProperty, PreviewProperty, TitleProperty } from '../text-post.constant';
+import { CONTENT_PROPERTY, PREVIEW_PROPERTY, TITLE_PROPERTY } from '../text-post.constant';
 
 export class TextPostRDO {
   @ApiProperty({
-    description: TitleProperty.DESCRIPTION,
-    example: TitleProperty.EXAMPLE
+    description: TITLE_PROPERTY.DESCRIPTION,
+    example: TITLE_PROPERTY.EXAMPLE
   })
   @Expose()
   public title: string;
 
   @ApiProperty({
-    description: PreviewProperty.DESCRIPTION,
-    example: PreviewProperty.EXAMPLE
+    description: PREVIEW_PROPERTY.DESCRIPTION,
+    example: PREVIEW_PROPERTY.EXAMPLE
   })
   @Expose()
   public preview: string;
 
   @ApiProperty({
-    description: ContentProperty.DESCRIPTION,
-    example: ContentProperty.EXAMPLE
+    description: CONTENT_PROPERTY.DESCRIPTION,
+    example: CONTENT_PROPERTY.EXAMPLE
   })
   @Expose()
   public content: string;

@@ -2,33 +2,33 @@ import { ApiProperty } from '@nestjs/swagger';
 
 import { Expose } from 'class-transformer';
 
-import { ContentProperty, CreatedAtProperty, IdProperty, UserIdProperty } from '../comment.constant';
+import { CONTENT_PROPERTY, CREATED_AT_PROPERTY, ID_PROPERTY, USER_ID_PROPERTY } from '../comment.constant';
 
 export class CommentRDO {
   @ApiProperty({
-    description: IdProperty.DESCRIPTION,
-    example: IdProperty.EXAMPLE
+    description: ID_PROPERTY.DESCRIPTION,
+    example: ID_PROPERTY.EXAMPLE
   })
   @Expose()
   public id: string;
 
   @ApiProperty({
-    description: ContentProperty.DESCRIPTION,
-    example: ContentProperty.EXAMPLE
+    description: CONTENT_PROPERTY.DESCRIPTION,
+    example: CONTENT_PROPERTY.EXAMPLE
   })
   @Expose()
   public content: string;
 
   @ApiProperty({
-    description: UserIdProperty.DESCRIPTION,
-    example: UserIdProperty.EXAMPLE
+    description: USER_ID_PROPERTY.DESCRIPTION,
+    example: USER_ID_PROPERTY.EXAMPLE
   })
   @Expose()
   public userId: string;
 
   @ApiProperty({
-    description: CreatedAtProperty.DESCRIPTION,
-    example: CreatedAtProperty.EXAMPLE
+    description: CREATED_AT_PROPERTY.DESCRIPTION,
+    example: CREATED_AT_PROPERTY.EXAMPLE
   })
   @Expose()
   public createdAt: Date;

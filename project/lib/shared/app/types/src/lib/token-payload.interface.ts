@@ -1,6 +1,4 @@
 export interface TokenPayload {
+  id: string;
   email: string;
-  fullName: string;
-  avatar: string;
-  createdAt: Date;
 }

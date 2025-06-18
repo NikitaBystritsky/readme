@@ -13,27 +13,27 @@ export const REQUIRED_MESSAGE = 'The field should not be empty.';
 export const ROUTE_PREFIX = 'posts/:postId/comments';
 export const TAG = 'Comments';
 
-export const ContentProperty = {
+export const CONTENT_PROPERTY = {
   DESCRIPTION: 'The text of the comment.',
   EXAMPLE: 'Красивый вид на озеро и горы).'
 }
 
-export const IdProperty = {
+export const ID_PROPERTY = {
   DESCRIPTION: 'A unique ID.',
   EXAMPLE: '17177772-33ba-42d8-a4ca-27758d30608e'
 }
 
-export const UserIdProperty = {
+export const USER_ID_PROPERTY = {
   DESCRIPTION: 'A unique user ID.',
   EXAMPLE: '667c673deb3171fbdaa4ce26'
 }
 
-export const CreatedAtProperty = {
+export const CREATED_AT_PROPERTY = {
   DESCRIPTION: 'Date the comment was created.',
   EXAMPLE: '2022-01-18T17:36:34.064Z'
 }
 
-export const CommentLength = {
+export const COMMENT_LENGTH = {
   MIN: 10,
   MAX: 300
 }

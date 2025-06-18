@@ -2,26 +2,26 @@ import { ApiProperty } from '@nestjs/swagger';
 
 import { Expose } from 'class-transformer';
 
-import { AccessProperty, EmailProperty, IdProperty } from '../auth.constant';
+import { ACCESS_PROPERTY, EMAIL_PROPERTY, ID_PROPERTY } from '../auth.constant';
 
 export class LoggedUserRDO {
   @ApiProperty({
-    description: IdProperty.DESCRIPTION,
-    example: IdProperty.EXAMPLE
+    description: ID_PROPERTY.DESCRIPTION,
+    example: ID_PROPERTY.EXAMPLE
   })
   @Expose()
   public id: string;
 
   @ApiProperty({
-    description: EmailProperty.DESCRIPTION,
-    example: EmailProperty.EXAMPLE
+    description: EMAIL_PROPERTY.DESCRIPTION,
+    example: EMAIL_PROPERTY.EXAMPLE
   })
   @Expose()
   public email: string;
 
   @ApiProperty({
-    description: AccessProperty.DESCRIPTION,
-    example: AccessProperty.EXAMPLE
+    description: ACCESS_PROPERTY.DESCRIPTION,
+    example: ACCESS_PROPERTY.EXAMPLE
   })
   @Expose()
   public accessToken: string;

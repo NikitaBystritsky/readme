@@ -7,7 +7,7 @@ import { Timestamps } from '@project/lib/shared/app/types';
 import { Entity, EntityId } from './entity.interface';
 import { Repository } from './repository.interface';
 import { createMessage } from '@project/lib/shared/helpers';
-import { ErrorMessage } from './repository.constant';
+import { NOT_FOUND_MESSAGE } from './repository.constant';
 
 export abstract class BaseMongoRepository<
     EntityType extends Entity<EntityId>,
@@ -50,11 +50,12 @@ export abstract class BaseMongoRepository<
       entity.toObject(),
       {
         new: true,
-        runValidators: true
+        runValidators: true,
+        strict: false
       }).exec();
 
     if(!document) {
-      throw new NotFoundException(createMessage(ErrorMessage.NOT_FOUND_MESSAGE, [id]));
+      throw new NotFoundException(createMessage(NOT_FOUND_MESSAGE, [id]));
     }
 
     return entity;
@@ -64,7 +65,7 @@ export abstract class BaseMongoRepository<
     const document = await this.model.findByIdAndDelete(id);
 
     if(!document) {
-      throw new NotFoundException(createMessage(ErrorMessage.NOT_FOUND_MESSAGE, [id]));
+      throw new NotFoundException(createMessage(NOT_FOUND_MESSAGE, [id]));
     }
   }
 
