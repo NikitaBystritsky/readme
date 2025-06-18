@@ -1,20 +1,22 @@
 import { HttpService } from '@nestjs/axios';
+import { ConfigType } from '@nestjs/config';
 import {
   Controller,
   Get,
   HttpCode,
   HttpStatus,
+  Inject,
   Query,
-  Req,
   UseFilters,
   UseGuards
 } from '@nestjs/common';
 import { ApiOperation, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 
-import { Post, RequestWithTokenPayload, Route } from '@project/lib/shared/app/types';
+import { PostQuery } from '@project/lib/shared/app/query';
+import { ApiGatewayAppConfig } from '@project/lib/config/api-gateway';
+import { Post, Route, TokenPayload } from '@project/lib/shared/app/types';
 
 import {
-  ApplicationServiceURL,
   GET_BY_TAG_API_QUERY,
   GET_BY_TYPE_API_QUERY,
   GET_BY_USER_API_QUERY,
@@ -28,17 +30,19 @@ import {
   ORDER_BY_DATE_API_QUERY,
   ORDER_BY_LIKES_API_QUERY,
   ORDER_BY_RATING_API_QUERY
-} from './app.constant';
-import { AxiosExceptionFilter } from './filters/axios-exception.filter';
-import { CheckAuthGuard } from './guards/check-auth.guard';
-import { PostQuery } from '@project/lib/shared/app/query';
+} from './news-feed.constant';
+import { AxiosExceptionFilter } from '../filters/axios-exception.filter';
+import { CheckAuthGuard } from '../guards/check-auth.guard';
+import { RequestHeader } from '../decorators/request-header.decorator';
+import { RequestTokenPayload } from '../decorators/request-token-payload.decorator';
 
 @ApiTags(NEWS_FEED_TAG)
 @Controller(NEWS_FEED_ROUTE_PREFIX)
 @UseFilters(AxiosExceptionFilter)
 export class NewsFeedController {
   constructor(
-    private readonly httpService: HttpService
+    private readonly httpService: HttpService,
+    @Inject(ApiGatewayAppConfig.KEY) private readonly apiGatewayOptions: ConfigType<typeof ApiGatewayAppConfig>
   ) {}
 
   @ApiResponse({
@@ -106,15 +110,18 @@ export class NewsFeedController {
   @Get(Route.Root)
   public async getNewsFeed(
     @Query() query: PostQuery,
-    @Req() req: RequestWithTokenPayload
+    @RequestHeader('authorization') authHeader: string,
+    @RequestTokenPayload() tokenPayload: TokenPayload
   ) {
-    const { data: subscriptions } = await this.httpService.axiosRef.get<string[]>(`${ApplicationServiceURL.Users}/${req.user?.sub}/subscribers`,
-      { headers: { 'Authorization': req.headers['authorization'] }
+    const usersURL = new URL(`${tokenPayload.sub}/subscribers`, this.apiGatewayOptions.usersServiceURL).toString();
+    const { data: subscriptions } = await this.httpService.axiosRef.get<string[]>(usersURL,
+      { headers: { 'Authorization': authHeader }
     });
-    const { data } = await this.httpService.axiosRef.post<Post[]>(`${ApplicationServiceURL.Posts}/news-feed`,
-      { ids: subscriptions.concat(req.user?.sub) },
+    const postsURL = new URL('news-feed', this.apiGatewayOptions.postsServiceURL).toString();
+    const { data } = await this.httpService.axiosRef.post<Post[]>(postsURL,
+      { ids: subscriptions.concat(tokenPayload.sub) },
       {
-        headers: { 'Authorization': req.headers['authorization'] },
+        headers: { 'Authorization': authHeader },
         params: { query }
       }
     );

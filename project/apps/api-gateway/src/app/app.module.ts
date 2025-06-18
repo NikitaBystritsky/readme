@@ -1,22 +1,25 @@
 import { Module } from '@nestjs/common';
 import { HttpModule } from '@nestjs/axios';
+import { ConfigService } from '@nestjs/config';
 
 import { ConfigApiGatewayModule } from '@project/lib/config/api-gateway';
 
-import { PublicationsController } from './publications.controller';
-import { CustomersController } from './customers.controller';
-import { HTTP_CLIENT_MAX_REDIRECTS, HTTP_CLIENT_TIMEOUT } from './app.constant';
+import { PublicationsController } from './publications/publications.controller';
+import { CustomersController } from './customers/customers.controller';
 import { CheckAuthGuard } from './guards/check-auth.guard';
-import { CommentsController } from './comments.controller';
-import { LikesController } from './likes.controller';
-import { NotificationsController } from './notifications.controller';
-import { NewsFeedController } from './news-feed.controller';
+import { CommentsController } from './comments/comments.controller';
+import { LikesController } from './likes/likes.controller';
+import { NotificationsController } from './notifications/notifications.controller';
+import { NewsFeedController } from './news-feed/news-feed.controller';
 
 @Module({
   imports: [
-    HttpModule.register({
-      timeout: HTTP_CLIENT_TIMEOUT,
-      maxRedirects: HTTP_CLIENT_MAX_REDIRECTS
+    HttpModule.registerAsync({
+      useFactory: async (configService: ConfigService) => ({
+        timeout: configService.get<number>('apiGatewayApp.clientTimeout'),
+        maxRedirects: configService.get<number>('apiGatewayApp.maxRedirects'),
+      }),
+      inject: [ConfigService]
     }),
     ConfigApiGatewayModule
   ],

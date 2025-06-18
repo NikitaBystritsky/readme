@@ -201,7 +201,7 @@ export class AuthController {
 
   @ApiResponse({
     status: HttpStatus.CONFLICT,
-    description: AUTHENTICATION_ERROR_RESPONSE
+    description: AUTHENTICATION_ERROR_RESPONSE,
   })
   @UseGuards(JWTAuthGuard)
   @Post(Route.Check)

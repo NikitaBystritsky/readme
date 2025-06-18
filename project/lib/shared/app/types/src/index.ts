@@ -31,3 +31,5 @@ export * from './lib/request-with-token-payload';
 export * from './lib/route.enum';
 export * from './lib/exchange.enum';
 export * from './lib/queue.enum';
+export * from './lib/api-gateway-config.interface';
+export * from './lib/error-request.interface';

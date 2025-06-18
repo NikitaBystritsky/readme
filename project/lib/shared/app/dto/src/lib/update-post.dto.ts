@@ -1,5 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 
+import { Transform } from 'class-transformer';
+
 import { IsArray, IsEnum, IsISO8601, IsOptional, IsString, IsUrl } from 'class-validator';
 
 import { PostStatus } from '@project/lib/shared/app/types';
@@ -23,6 +25,7 @@ export class UpdatePostDTO {
     description: STATUS_PROPERTY.DESCRIPTION,
     example: STATUS_PROPERTY.EXAMPLE
   })
+  @Transform(({value}) => value.toLowerCase())
   @IsEnum(PostStatus, {message: POST_STATUS_MESSAGE})
   @IsOptional()
   public status?: PostStatus;

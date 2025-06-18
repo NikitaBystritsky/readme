@@ -1,4 +1,5 @@
 import { HttpService } from '@nestjs/axios';
+import { ConfigType } from '@nestjs/config';
 import {
   Body,
   Controller,
@@ -6,22 +7,22 @@ import {
   Get,
   HttpCode,
   HttpStatus,
+  Inject,
   Param,
   Post,
   Query,
-  Req,
   UseFilters,
   UseGuards,
   UseInterceptors
 } from '@nestjs/common';
 import { ApiOperation, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 
+import { ApiGatewayAppConfig } from '@project/lib/config/api-gateway';
 import { CreateCommentDTO } from '@project/lib/shared/app/dto';
-import {Route, RequestWithTokenPayload} from '@project/lib/shared/app/types';
+import { Route, TokenPayload } from '@project/lib/shared/app/types';
 import { CommentsQuery } from '@project/lib/shared/app/query';
 
 import {
-  ApplicationServiceURL,
   COMMENT_CREATED_RESPONSE,
   COMMENT_DELETE_RESPONSE,
   COMMENT_ID_API_PARAM,
@@ -38,17 +39,20 @@ import {
   POST_ID_API_PARAM,
   POST_ID_PARAM,
   VALIDATION_ERROR_RESPONSE
-} from './app.constant';
-import { AxiosExceptionFilter } from './filters/axios-exception.filter';
-import { CheckAuthGuard } from './guards/check-auth.guard';
-import { UserIdInterceptor } from './interceptor/userid.interceptor';
+} from './comments.constant';
+import { AxiosExceptionFilter } from '../filters/axios-exception.filter';
+import { CheckAuthGuard } from '../guards/check-auth.guard';
+import { UserIdInterceptor } from '../interceptor/userid.interceptor';
+import { RequestHeader } from '../decorators/request-header.decorator';
+import { RequestTokenPayload } from '../decorators/request-token-payload.decorator';
 
 @ApiTags(COMMENT_TAG)
 @Controller(COMMENT_ROUTE_PREFIX)
 @UseFilters(AxiosExceptionFilter)
 export class CommentsController {
   constructor(
-    private readonly httpService: HttpService
+    private readonly httpService: HttpService,
+    @Inject(ApiGatewayAppConfig.KEY) private readonly apiGatewayOptions: ConfigType<typeof ApiGatewayAppConfig>
   ) {}
 
   @ApiResponse({
@@ -81,12 +85,13 @@ export class CommentsController {
   @HttpCode(HttpStatus.CREATED)
   @Post(Route.Root)
   public async create(
+    @Body() dto: CreateCommentDTO,
     @Param('postId') postId: string,
-    @Req() req: Request,
-    @Body() dto: CreateCommentDTO
+    @RequestHeader('authorization') authHeader: string
   ) {
-    const { data } = await this.httpService.axiosRef.post(`${ApplicationServiceURL.Posts}/${postId}/comments`, dto, {
-      headers: { 'Authorization': req.headers['authorization'] }
+    const url = new URL(`${postId}/comments`, this.apiGatewayOptions.postsServiceURL).toString();
+    const { data } = await this.httpService.axiosRef.post(url, dto, {
+      headers: { 'Authorization': authHeader }
     });
 
     return data;
@@ -130,7 +135,8 @@ export class CommentsController {
     @Param('postId') postId: string,
     @Query() query: CommentsQuery
   ) {
-    const { data } = await this.httpService.axiosRef.get(`${ApplicationServiceURL.Posts}/${postId}/comments`, {
+    const url = new URL(`${postId}/comments`, this.apiGatewayOptions.postsServiceURL).toString();
+    const { data } = await this.httpService.axiosRef.get(url, {
       params: query
     });
 
@@ -161,11 +167,13 @@ export class CommentsController {
   public async delete(
     @Param('postId') postId: string,
     @Param('id') id: string,
-    @Req() req: RequestWithTokenPayload
+    @RequestHeader('authorization') authHeader: string,
+    @RequestTokenPayload() tokenPayload: TokenPayload
   ) {
-    await this.httpService.axiosRef.delete(`${ApplicationServiceURL.Posts}/${postId}/comments/${id}`, {
-      headers: { 'Authorization': req.headers['authorization'] },
-      params: { userId: req.user?.sub }
+    const url = new URL(`${postId}/comments/${id}`, this.apiGatewayOptions.postsServiceURL).toString();
+    await this.httpService.axiosRef.delete(url, {
+      headers: { 'Authorization': authHeader },
+      params: { userId: tokenPayload.sub }
     });
   }
 }

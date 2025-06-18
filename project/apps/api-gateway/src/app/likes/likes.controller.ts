@@ -1,20 +1,21 @@
 import { HttpService } from '@nestjs/axios';
+import { ConfigType } from '@nestjs/config';
 import {
   Controller,
   HttpCode,
   HttpStatus,
+  Inject,
   Param,
   Post,
-  Req,
   UseFilters,
   UseGuards
 } from '@nestjs/common';
 import { ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
 
+import { ApiGatewayAppConfig } from '@project/lib/config/api-gateway';
 import { Route } from '@project/lib/shared/app/types';
 
 import {
-  ApplicationServiceURL,
   LIKE_POST_API_OPERATION,
   LIKE_ROUTE_PREFIX,
   LIKE_TAG,
@@ -24,16 +25,18 @@ import {
   POST_ID_PARAM,
   POST_LIKE_MESSAGE,
   USER_ID_API_PARAM
-} from './app.constant';
-import { AxiosExceptionFilter } from './filters/axios-exception.filter';
-import { CheckAuthGuard } from './guards/check-auth.guard';
+} from './likes.constant';
+import { AxiosExceptionFilter } from '../filters/axios-exception.filter';
+import { CheckAuthGuard } from '../guards/check-auth.guard';
+import { RequestHeader } from '../decorators/request-header.decorator';
 
 @ApiTags(LIKE_TAG)
 @Controller(LIKE_ROUTE_PREFIX)
 @UseFilters(AxiosExceptionFilter)
 export class LikesController {
   constructor(
-    private readonly httpService: HttpService
+    private readonly httpService: HttpService,
+    @Inject(ApiGatewayAppConfig.KEY) private readonly apiGatewayOptions: ConfigType<typeof ApiGatewayAppConfig>
   ) {}
 
   @ApiResponse({
@@ -68,10 +71,11 @@ export class LikesController {
   public async toggle(
     @Param('postId') postId: string,
     @Param('id') userId: string,
-    @Req() req: Request
+    @RequestHeader('authorization') authHeader: string
   ) {
-    await this.httpService.axiosRef.post(`${ApplicationServiceURL.Posts}/${postId}/like/${userId}`, {
-      headers: { 'Authorization': req.headers['authorization'] },
+    const url = new URL(`${postId}/like/${userId}`, this.apiGatewayOptions.postsServiceURL).toString();
+    await this.httpService.axiosRef.post(url, {
+      headers: { 'Authorization': authHeader },
     });
   }
 }
